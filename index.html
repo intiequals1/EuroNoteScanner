@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <title>EuroNoteScanner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Tesseract.js zur Texterkennung -->
+
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js"></script>
-    
-    <!-- Eigenes JavaScript -->
     <script src="app.js" defer></script>
-    
-    <!-- Stylesheet -->
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,23 +23,30 @@
 
         <h3>So funktioniert es:</h3>
         <ol>
-            <li><strong>Foto machen oder auswählen:</strong> Lade ein Bild eines Geldscheins hoch oder mache eines direkt mit deiner Kamera.</li>
-            <li><strong>Analyse starten:</strong> Klicke auf „Bild analysieren“. Die App liest die Seriennummer auf dem Geldschein aus.</li>
-            <li><strong>Ergebnisse prüfen:</strong> Die Seriennummer, die Ziffernsumme, die Quersumme und der Ländercode werden automatisch berechnet.</li>
-            <li><strong>Bearbeiten:</strong> Du kannst alle Felder manuell ändern, falls etwas nicht korrekt erkannt wurde (z. B. doppelte Buchstaben wie „ND“ statt „D“).</li>
-            <li><strong>Verfasser angeben:</strong> Gib deinen Namen oder ein Kürzel ein, um deine Analyse zuzuordnen.</li>
-            <li><strong>Speichern:</strong> Klicke auf „Speichern & Dokumentieren“, um deine Analyse dauerhaft zu sichern.</li>
+            <li><strong>Bild hochladen:</strong> Lade ein Bild eines Geldscheins hoch oder mache eines mit deiner Kamera.</li>
+            <li><strong>Analyse starten:</strong> Klicke auf „Bild analysieren“.</li>
+            <li><strong>Ländercode prüfen & ändern:</strong> Du kannst den automatisch erkannten Ländercode korrigieren. Danach wird das Herkunftsland angezeigt.</li>
+            <li><strong>Speichern & Dokumentieren:</strong> Wenn alles stimmt, kannst du die Daten dauerhaft speichern.</li>
         </ol>
 
-        <p><strong>Hinweis:</strong> Die Analyse erfolgt lokal im Browser. Wenn du die Ergebnisse speicherst, werden sie über eine geschützte Verbindung in eine Datei deines eigenen GitHub-Kontos übertragen und dort dauerhaft abgelegt. Es erfolgt keine Weitergabe an andere Dritte, jedoch werden diese Daten auf der Seite <a href="dokumentation.html">www.die-null.at/dokumentation.html</a> angezeigt.</p>
-        <p>Bitte sende eine E-Mail an <a href="mailto:claudiu.dangulea@gmail.com">claudiu.dangulea@gmail.com</a>, falls Bedenken bestehen oder Daten gelöscht werden sollen.</p>
+        <p><strong>Hinweis:</strong> Die Analyse erfolgt lokal im Browser. Wenn du speicherst, werden die Daten in deinem GitHub-Repository dokumentiert.</p>
     </section>
 
     <main>
         <h1>📸 Euro-Schein Analyse</h1>
         <input type="file" id="imageInput" accept="image/*"><br><br>
         <button onclick="analyzeNote()">Bild analysieren</button>
+
         <div id="results"></div>
+
+        <div id="manualCountrySection" style="display:none; margin-top: 20px;">
+            <label for="countryCode">Ländercode ändern:</label>
+            <input type="text" id="countryCode" maxlength="2" placeholder="z.B. ND">
+            <button onclick="resolveCountryCode()">Code prüfen</button>
+            <p id="countryName"></p>
+        </div>
+
+        <button id="saveButton" style="display:none; margin-top: 20px;" onclick="saveEntry()">Speichern & Dokumentieren</button>
     </main>
 </body>
 </html>
