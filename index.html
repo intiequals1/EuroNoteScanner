@@ -17,13 +17,14 @@
       "Z": "Belgien",
       "S": "Italien",
       "M": "Portugal",
-      "L": "Finnland",
-      "ND": "Österreich (manuell ergänzt)"
+      "L": "Finnland"
     };
 
     function analyzeNote() {
       const file = document.getElementById("imageInput").files[0];
       if (!file) return;
+
+      document.getElementById("results").innerHTML = "<p>🔄 Bild wird analysiert, bitte warten...</p><progress></progress>";
 
       const img = URL.createObjectURL(file);
       const start = performance.now();
@@ -40,7 +41,7 @@
         const crossSum = sum.toString().split('').reduce((a, b) => a + Number(b), 0);
         const date = new Date().toLocaleString();
         const duration = ((performance.now() - start) / 1000).toFixed(2);
-        const countryCode = serial.match(/^[A-Z]{1,2}/)[0];
+        const countryCode = serial[0];
 
         document.getElementById("results").innerHTML = `
           <h3>Analyseergebnisse (bearbeitbar)</h3>
@@ -61,7 +62,7 @@
     }
 
     function resolveCountryCode() {
-      const code = document.getElementById("code").value.trim().toUpperCase();
+      const code = document.getElementById("code").value.trim().toUpperCase()[0];
       const land = countryMap[code] || "Unbekannt";
       document.getElementById("countryName").innerText = "Herkunftsland: " + land;
     }
