@@ -67,9 +67,32 @@
       document.getElementById("countryName").innerText = "Herkunftsland: " + land;
     }
 
-    function saveEntry() {
-      alert("Speichern-Funktion muss separat angebunden werden (z.B. GitHub Upload).\nDies ist nur ein Dummy-Button.");
-    }
+        function saveEntry() {
+  const entry = {
+    serial: document.getElementById("serial").value,
+    digits: document.getElementById("digits").value,
+    sum: document.getElementById("sum").value,
+    crossSum: document.getElementById("crossSum").value,
+    country: document.getElementById("code").value,
+    date: document.getElementById("date").value,
+    name: document.getElementById("authorName").value || "Unbekannt",
+    img: document.querySelector("img").src
+  };
+
+  fetch("/.netlify/functions/saveToGitHub", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entry)
+  })
+    .then(response => response.json())
+    .then(data => {
+      alert("✅ Analyse wurde erfolgreich gespeichert!");
+    })
+    .catch(err => {
+      alert("❌ Fehler beim Speichern: " + err.message);
+    });
+}
+        
     </script>
     <link rel="stylesheet" href="style.css">
 </head>
