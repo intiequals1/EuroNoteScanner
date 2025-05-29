@@ -1,0 +1,23 @@
+{
+  "name": "euronotescanner",
+  "version": "1.0.0",
+  "description": "Eine einfache Webapp zur Dokumentation und Analyse von Euro-Geldscheinen.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intiequals1/EuroNoteScanner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/intiequals1/EuroNoteScanner/issues"
+  },
+  "homepage": "https://github.com/intiequals1/EuroNoteScanner#readme",
+  "dependencies": {
+    "@octokit/rest": "^22.0.0"
+  }
+}
