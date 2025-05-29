@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Dokumentation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>📄 Dokumentierte Scheine</h1>
+    <div id="entries"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const params = new URLSearchParams(window.location.search);
+            const data = JSON.parse(decodeURIComponent(params.get("data") || "[]"));
+            const container = document.getElementById("entries");
+
+            data.forEach(entry => {
+                const block = document.createElement("div");
+                block.className = "entry";
+                block.innerHTML = `
+                    <p><strong>Verfasser:</strong> ${entry.name}</p>
+                    <p><strong>Seriennummer:</strong> ${entry.serial}</p>
+                    <p><strong>Ziffernfolge:</strong> ${entry.digits.join(" ")}</p>
+                    <p><strong>Ziffernsumme:</strong> ${entry.sum}</p>
+                    <p><strong>Quersumme:</strong> ${entry.crossSum}</p>
+                    <p><strong>Ländercode:</strong> ${entry.country}</p>
+                    <p><strong>Datum:</strong> ${entry.date}</p>
+                    <img src="${entry.img}" width="300">
+                `;
+                container.appendChild(block);
+            });
+        });
+    </script>
+</body>
+</html>

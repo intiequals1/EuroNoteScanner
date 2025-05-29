@@ -3,16 +3,15 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Euro-Schein Dokumentation</title>
+    <title>EuroNoteScanner</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>📸 Euro-Schein Dokumentation</h1>
-    <input type="file" id="imageInput" accept="image/*">
-    <button onclick="processImage()">Bild analysieren</button>
+    <h1>📸 Euro-Schein Analyse</h1>
+    <input type="file" id="imageInput" accept="image/*"><br><br>
+    <button onclick="analyzeNote()">Bild analysieren</button>
     <div id="results"></div>
-
-    <script src="app.js"></script>
 </body>
+<script src="app.js"></script>
 </html>

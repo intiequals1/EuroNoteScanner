@@ -1,15 +1,16 @@
 
 body {
     font-family: Arial, sans-serif;
+    background: #f8f8f8;
     margin: 20px;
-    background: #f0f0f0;
 }
-h1 {
+h1, h3 {
     color: #2c3e50;
 }
-#results {
-    margin-top: 20px;
-    background: white;
-    padding: 10px;
-    border-radius: 5px;
+.entry {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 15px;
 }
