@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav>
+        <a href="start.html">🏠 Start</a>
+        <a href="index.html">🔍 Analyse</a>
+        <a href="dokumentation.html">📄 Dokumentation</a>
+    </nav>
     <h1>📄 Dokumentierte Scheine</h1>
     <div id="entries"></div>
     <script>
@@ -21,7 +26,7 @@
                 block.innerHTML = `
                     <p><strong>Verfasser:</strong> ${entry.name}</p>
                     <p><strong>Seriennummer:</strong> ${entry.serial}</p>
-                    <p><strong>Ziffernfolge:</strong> ${entry.digits.join(" ")}</p>
+                    <p><strong>Ziffernfolge:</strong> ${entry.digits}</p>
                     <p><strong>Ziffernsumme:</strong> ${entry.sum}</p>
                     <p><strong>Quersumme:</strong> ${entry.crossSum}</p>
                     <p><strong>Ländercode:</strong> ${entry.country}</p>
