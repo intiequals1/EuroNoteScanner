@@ -1,0 +1,21 @@
+# System-/Editordateien
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Node-Module, falls du später npm oder eine JS-Build-Umgebung nutzt
+node_modules/
+
+# Logs
+*.log
+
+# Backup-/Temp-Dateien
+*.bak
+*.tmp
+*.swp
+
+# MacOS ZIP-Fehlerquellen
+__MACOSX/
