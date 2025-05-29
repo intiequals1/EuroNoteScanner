@@ -4,72 +4,14 @@
     <meta charset="UTF-8">
     <title>EuroNoteScanner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
+    <!-- Tesseract.js zur Texterkennung -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js"></script>
-    <script defer>
-    const countryMap = {
-      "D": "Deutschland",
-      "N": "Österreich",
-      "P": "Niederlande",
-      "U": "Frankreich",
-      "X": "Deutschland",
-      "Y": "Griechenland",
-      "Z": "Belgien",
-      "S": "Italien",
-      "M": "Portugal",
-      "L": "Finnland",
-      "ND": "Österreich (manuell ergänzt)"
-    };
-
-    function analyzeNote() {
-      const file = document.getElementById("imageInput").files[0];
-      if (!file) return;
-
-      const img = URL.createObjectURL(file);
-      const start = performance.now();
-
-      Tesseract.recognize(file, 'eng').then(({ data: { text } }) => {
-        const serial = (text.match(/[A-Z]{1,2}[0-9]{10}/) || [null])[0];
-        if (!serial) {
-          document.getElementById("results").innerHTML = "<p>Keine Seriennummer erkannt.</p>";
-          return;
-        }
-
-        const digits = serial.replace(/\D/g, '').split('').map(Number);
-        const sum = digits.reduce((a, b) => a + b, 0);
-        const crossSum = sum.toString().split('').reduce((a, b) => a + Number(b), 0);
-        const date = new Date().toLocaleString();
-        const duration = ((performance.now() - start) / 1000).toFixed(2);
-        const countryCode = serial.match(/^[A-Z]{1,2}/)[0];
-
-        document.getElementById("results").innerHTML = `
-          <h3>Analyseergebnisse (bearbeitbar)</h3>
-          <label>Seriennummer: <input id="serial" value="${serial}"></label><br>
-          <label>Ziffernfolge: <input id="digits" value="${digits.join(' ')}"></label><br>
-          <label>Ziffernsumme: <input id="sum" value="${sum}"></label><br>
-          <label>Quersumme: <input id="crossSum" value="${crossSum}"></label><br>
-          <label>Ländercode: <input id="code" value="${countryCode}" onchange="resolveCountryCode()"></label><br>
-          <p id="countryName">Herkunftsland: ${countryMap[countryCode] || 'Unbekannt'}</p>
-          <label>Aufnahmedatum: <input id="date" value="${date}"></label><br>
-          <p>⏱ Analysezeit: ${duration} Sekunden</p>
-          <label>Verfasser: <input id="authorName"></label><br><br>
-          <img src="${img}" width="300">
-          <br><br>
-          <button onclick="saveEntry()">📄 Speichern & Dokumentieren</button>
-        `;
-      });
-    }
-
-    function resolveCountryCode() {
-      const code = document.getElementById("code").value.trim().toUpperCase();
-      const land = countryMap[code] || "Unbekannt";
-      document.getElementById("countryName").innerText = "Herkunftsland: " + land;
-    }
-
-    function saveEntry() {
-      alert("Speichern-Funktion muss separat angebunden werden (z.B. GitHub Upload).\nDies ist nur ein Dummy-Button.");
-    }
-    </script>
+    
+    <!-- Eigenes JavaScript -->
+    <script src="app.js" defer></script>
+    
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -83,13 +25,18 @@
         <h2>🔍 Was kannst du hier machen?</h2>
         <p>Diese Seite dient dazu, einen echten Euro-Geldschein zu analysieren und seine Seriennummer sowie andere Merkmale auszulesen.</p>
 
-        <h3>So funktioniert es!</h3>
+        <h3>So funktioniert es:</h3>
         <ol>
-            <li><strong>Bild hochladen:</strong> Lade ein Bild eines Geldscheins hoch oder mache eines mit deiner Kamera.</li>
-            <li><strong>Analyse starten:</strong> Klicke auf „Bild analysieren“.</li>
-            <li><strong>Ländercode prüfen & ggf. ändern:</strong> Du kannst den automatisch erkannten Ländercode korrigieren.</li>
-            <li><strong>Speichern & Dokumentieren:</strong> Wenn alles stimmt, kannst du die Daten dauerhaft sichern.</li>
+            <li><strong>Foto machen oder auswählen:</strong> Lade ein Bild eines Geldscheins hoch oder mache eines direkt mit deiner Kamera.</li>
+            <li><strong>Analyse starten:</strong> Klicke auf „Bild analysieren“. Die App liest die Seriennummer auf dem Geldschein aus.</li>
+            <li><strong>Ergebnisse prüfen:</strong> Die Seriennummer, die Ziffernsumme, die Quersumme und der Ländercode werden automatisch berechnet.</li>
+            <li><strong>Bearbeiten:</strong> Du kannst alle Felder manuell ändern, falls etwas nicht korrekt erkannt wurde (z. B. doppelte Buchstaben wie „ND“ statt „D“).</li>
+            <li><strong>Verfasser angeben:</strong> Gib deinen Namen oder ein Kürzel ein, um deine Analyse zuzuordnen.</li>
+            <li><strong>Speichern:</strong> Klicke auf „Speichern & Dokumentieren“, um deine Analyse dauerhaft zu sichern.</li>
         </ol>
+
+        <p><strong>Hinweis:</strong> Die Analyse erfolgt lokal im Browser. Wenn du die Ergebnisse speicherst, werden sie über eine geschützte Verbindung in eine Datei deines eigenen GitHub-Kontos übertragen und dort dauerhaft abgelegt. Es erfolgt keine Weitergabe an andere Dritte, jedoch werden diese Daten auf der Seite <a href="dokumentation.html">www.die-null.at/dokumentation.html</a> angezeigt.</p>
+        <p>Bitte sende eine E-Mail an <a href="mailto:claudiu.dangulea@gmail.com">claudiu.dangulea@gmail.com</a>, falls Bedenken bestehen oder Daten gelöscht werden sollen.</p>
     </section>
 
     <main>
