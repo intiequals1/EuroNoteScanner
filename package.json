@@ -2,6 +2,7 @@
   "name": "euronotescanner",
   "version": "1.0.0",
   "description": "Eine einfache Webapp zur Dokumentation und Analyse von Euro-Geldscheinen.",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
