@@ -62,4 +62,14 @@ export const handler = async (event) => {
       });
 
       return {
-        statusCode: 2
+        statusCode: 201,
+        body: JSON.stringify({ message: "Created new entries.json" }),
+      };
+    }
+
+    return {
+      statusCode: 500,
+      body: `Error: ${error.message}`,
+    };
+  }
+};
