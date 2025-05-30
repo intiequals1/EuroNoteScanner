@@ -1,10 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <title>Dokumentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .entry {
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -14,14 +23,24 @@
     </nav>
     <h1>📄 Dokumentierte Scheine</h1>
     <div id="entries"></div>
-   <script>
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("docs/entries.json")
-        .then(response => response.json())
-        .then(data => {
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const raw = params.get("data");
+            if (!raw) {
+                document.getElementById("entries").innerText = "⚠️ Keine Daten übergeben.";
+                return;
+            }
+
+            const entries = JSON.parse(decodeURIComponent(raw));
             const container = document.getElementById("entries");
 
-            data.forEach(entry => {
+            entries.forEach(entry => {
+                const vertDigits = (entry.vertDigits || "").split('').map(Number);
+                const vertSum = vertDigits.reduce((a, b) => a + b, 0);
+                const vertCross = vertSum.toString().split('').reduce((a, b) => a + Number(b), 0);
+
                 const block = document.createElement("div");
                 block.className = "entry";
                 block.innerHTML = `
@@ -30,18 +49,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p><strong>Ziffernfolge:</strong> ${entry.digits}</p>
                     <p><strong>Ziffernsumme:</strong> ${entry.sum}</p>
                     <p><strong>Quersumme:</strong> ${entry.crossSum}</p>
+                    ${entry.vertDigits ? `
+                        <p><strong>Vertikale Ziffernfolge:</strong> ${entry.vertDigits}</p>
+                        <p><strong>Quersumme vertikal:</strong> ${vertCross}</p>
+                    ` : ''}
                     <p><strong>Ländercode:</strong> ${entry.country}</p>
                     <p><strong>Datum:</strong> ${entry.date}</p>
                     <img src="${entry.img}" width="300">
                 `;
                 container.appendChild(block);
             });
-        })
-        .catch(error => {
-            document.getElementById("entries").innerText = "⚠️ Fehler beim Laden der Daten.";
-            console.error("Fehler beim Laden von entries.json:", error);
         });
-});
-</script>
+    </script>
 </body>
 </html>
