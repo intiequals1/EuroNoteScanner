@@ -2,19 +2,9 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="favicon.png" type="image/png">
     <title>Dokumentation</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .entry {
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-    </style>
+    <link rel="icon" href="favicon.png">
 </head>
 <body>
     <nav>
@@ -24,43 +14,29 @@
     </nav>
     <h1>📄 Dokumentierte Scheine</h1>
     <div id="entries"></div>
-
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const params = new URLSearchParams(window.location.search);
-            const raw = params.get("data");
-            if (!raw) {
-                document.getElementById("entries").innerText = "⚠️ Keine Daten übergeben.";
-                return;
-            }
-
-            const entries = JSON.parse(decodeURIComponent(raw));
+        fetch("docs/entries.json")
+          .then(response => response.json())
+          .then(data => {
             const container = document.getElementById("entries");
-
-            entries.forEach(entry => {
-                const vertDigits = (entry.vertDigits || "").split('').map(Number);
-                const vertSum = vertDigits.reduce((a, b) => a + b, 0);
-                const vertCross = vertSum.toString().split('').reduce((a, b) => a + Number(b), 0);
-
-                const block = document.createElement("div");
-                block.className = "entry";
-                block.innerHTML = `
-                    <p><strong>Verfasser:</strong> ${entry.name}</p>
-                    <p><strong>Seriennummer:</strong> ${entry.serial}</p>
-                    <p><strong>Ziffernfolge:</strong> ${entry.digits}</p>
-                    <p><strong>Ziffernsumme:</strong> ${entry.sum}</p>
-                    <p><strong>Quersumme:</strong> ${entry.crossSum}</p>
-                    ${entry.vertDigits ? `
-                        <p><strong>Vertikale Ziffernfolge:</strong> ${entry.vertDigits}</p>
-                        <p><strong>Quersumme vertikal:</strong> ${vertCross}</p>
-                    ` : ''}
-                    <p><strong>Ländercode:</strong> ${entry.country}</p>
-                    <p><strong>Datum:</strong> ${entry.date}</p>
-                    <img src="${entry.img}" width="300">
-                `;
-                container.appendChild(block);
+            data.forEach(entry => {
+              const block = document.createElement("div");
+              block.className = "entry";
+              block.innerHTML = `
+                <p><strong>Verfasser:</strong> ${entry.name}</p>
+                <p><strong>Seriennummer:</strong> ${entry.serial}</p>
+                <p><strong>Ziffernfolge:</strong> ${entry.digits}</p>
+                <p><strong>Ziffernsumme:</strong> ${entry.sum}</p>
+                <p><strong>Quersumme:</strong> ${entry.crossSum}</p>
+                <p><strong>Vertikale Ziffernfolge:</strong> ${entry.verticalDigits || '-'}</p>
+                <p><strong>Quersumme (vertikal):</strong> ${entry.verticalCrossSum || '-'}</p>
+                <p><strong>Ländercode:</strong> ${entry.country}</p>
+                <p><strong>Datum:</strong> ${entry.date}</p>
+                <img src="${entry.img}" width="300">
+              `;
+              container.appendChild(block);
             });
-        });
+          });
     </script>
 </body>
 </html>
