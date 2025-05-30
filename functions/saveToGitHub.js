@@ -1,64 +1,48 @@
-import { Octokit } from "@octokit/rest";
+// functions/saveToGitHub.js
+import { Octokit } from "octokit";
 
-export const handler = async function (event) {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   const token = process.env.GITHUB_TOKEN;
+  const octokit = new Octokit({ auth: token });
+
   const repo = "EuroNoteScanner";
   const owner = "intiequals1";
   const path = "docs/entries.json";
   const branch = "main";
 
-  const octokit = new Octokit({ auth: token });
-
-  const newEntry = JSON.parse(event.body);
-  let sha;
-  let entries = [];
+  const newEntry = req.body;
 
   try {
-    const { data } = await octokit.repos.getContent({
+    // Hole vorhandene Datei
+    const { data: file } = await octokit.rest.repos.getContent({
       owner,
       repo,
       path,
-      ref: branch,
+      ref: branch
     });
 
-    sha = data.sha;
-    const content = Buffer.from(data.content, "base64").toString();
-    entries = JSON.parse(content);
-  } catch (err) {
-    if (err.status === 404) {
-      entries = [];
-    } else {
-      return { statusCode: 500, body: JSON.stringify(err.message) };
-    }
-  }
+    const sha = file.sha;
+    const content = Buffer.from(file.content, "base64").toString();
+    const entries = JSON.parse(content);
+    entries.push(newEntry);
 
-  entries.push(newEntry);
-
-  const updatedContent = Buffer.from(JSON.stringify(entries, null, 2)).toString("base64");
-
-  try {
-    await octokit.repos.createOrUpdateFileContents({
+    // Aktualisiere Datei
+    await octokit.rest.repos.createOrUpdateFileContents({
       owner,
       repo,
       path,
-      message: "Neue Analyse gespeichert",
-      content: updatedContent,
+      message: "📄 Neue Banknoten-Analyse hinzugefügt",
+      content: Buffer.from(JSON.stringify(entries, null, 2)).toString("base64"),
       sha,
-      branch,
+      branch
     });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "Eintrag gespeichert" }),
-    };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
-    };
+    return res.status(200).json({ message: "Erfolgreich gespeichert" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
-};
+}
