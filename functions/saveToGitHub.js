@@ -1,4 +1,8 @@
-const { Octokit } = require("@octokit/rest");
+// Anstelle von:
+// const { Octokit } = require("@octokit/rest");
+
+// Nutze das hier:
+const { Octokit } = await import("@octokit/rest");
 
 exports.handler = async function (event) {
   if (event.httpMethod !== "POST") {
