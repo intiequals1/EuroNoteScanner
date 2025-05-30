@@ -1,6 +1,6 @@
 import { Octokit } from "@octokit/rest";
 
-export async function handler(event) {
+export const handler = async function (event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
@@ -14,33 +14,38 @@ export async function handler(event) {
   const octokit = new Octokit({ auth: token });
 
   const newEntry = JSON.parse(event.body);
+  let sha;
+  let entries = [];
 
   try {
-    let sha;
-    let entries = [];
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path,
+      ref: branch,
+    });
 
-    try {
-      const { data } = await octokit.repos.getContent({ owner, repo, path, ref: branch });
-      sha = data.sha;
-      const content = Buffer.from(data.content, "base64").toString();
-      entries = JSON.parse(content);
-    } catch (err) {
-      if (err.status === 404) {
-        entries = [];
-      } else {
-        throw err;
-      }
+    sha = data.sha;
+    const content = Buffer.from(data.content, "base64").toString();
+    entries = JSON.parse(content);
+  } catch (err) {
+    if (err.status === 404) {
+      entries = [];
+    } else {
+      return { statusCode: 500, body: JSON.stringify(err.message) };
     }
+  }
 
-    entries.push(newEntry);
+  entries.push(newEntry);
 
-    const updatedContent = Buffer.from(JSON.stringify(entries, null, 2)).toString("base64");
+  const updatedContent = Buffer.from(JSON.stringify(entries, null, 2)).toString("base64");
 
+  try {
     await octokit.repos.createOrUpdateFileContents({
       owner,
       repo,
       path,
-      message: "Eintrag hinzugefügt",
+      message: "Neue Analyse gespeichert",
       content: updatedContent,
       sha,
       branch,
@@ -48,13 +53,12 @@ export async function handler(event) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Eintrag erfolgreich gespeichert!" }),
+      body: JSON.stringify({ message: "Eintrag gespeichert" }),
     };
-
   } catch (error) {
     return {
       statusCode: 500,
-      body: `Fehler beim Speichern: ${error.message}`,
+      body: JSON.stringify({ error: error.message }),
     };
   }
-}
+};
