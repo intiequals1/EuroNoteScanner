@@ -4,7 +4,9 @@
 // Nutze das hier:
 const { Octokit } = await import("@octokit/rest");
 
-exports.handler = async function (event) {
+export const handler = async (event) => {
+  const { Octokit } = await import("@octokit/rest");
+
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
@@ -16,7 +18,6 @@ exports.handler = async function (event) {
   const branch = "main";
 
   const octokit = new Octokit({ auth: token });
-
   const newEntry = JSON.parse(event.body);
 
   try {
@@ -44,20 +45,21 @@ exports.handler = async function (event) {
       owner,
       repo,
       path,
-      message: "Eintrag automatisch über Webapp gespeichert",
+      message: "Update entries",
       content: updatedContent,
       sha,
-      branch,
+      branch
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Erfolgreich gespeichert!" }),
+      body: JSON.stringify({ message: "Eintrag gespeichert." })
     };
+
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
+      body: `❌ Fehler beim Speichern: ${error.message}`
     };
   }
 };
