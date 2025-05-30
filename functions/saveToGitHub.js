@@ -1,12 +1,6 @@
-// Anstelle von:
-// const { Octokit } = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 
-// Nutze das hier:
-const { Octokit } = await import("@octokit/rest");
-
-export const handler = async (event) => {
-  const { Octokit } = await import("@octokit/rest");
-
+export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
@@ -18,6 +12,7 @@ export const handler = async (event) => {
   const branch = "main";
 
   const octokit = new Octokit({ auth: token });
+
   const newEntry = JSON.parse(event.body);
 
   try {
@@ -45,21 +40,21 @@ export const handler = async (event) => {
       owner,
       repo,
       path,
-      message: "Update entries",
+      message: "Eintrag hinzugefügt",
       content: updatedContent,
       sha,
-      branch
+      branch,
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Eintrag gespeichert." })
+      body: JSON.stringify({ message: "Eintrag erfolgreich gespeichert!" }),
     };
 
   } catch (error) {
     return {
       statusCode: 500,
-      body: `❌ Fehler beim Speichern: ${error.message}`
+      body: `Fehler beim Speichern: ${error.message}`,
     };
   }
-};
+}
