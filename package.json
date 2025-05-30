@@ -20,6 +20,6 @@
   "homepage": "https://github.com/intiequals1/EuroNoteScanner#readme",
   "type": "module",
   "dependencies": {
-    "@octokit/rest": "^22.0.0"
+    "@octokit/rest": "^3.2.1"
   }
 }
