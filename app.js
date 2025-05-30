@@ -48,37 +48,41 @@ function calcVerticalCrossSum() {
 }
 
 function saveEntry() {
-  const reader = new FileReader();
-  const file = document.getElementById("imageInput").files[0];
+  const canvas = document.createElement("canvas");
+  const imgElement = document.querySelector("img");
+  canvas.width = imgElement.naturalWidth;
+  canvas.height = imgElement.naturalHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(imgElement, 0, 0);
+  const imgBase64 = canvas.toDataURL("image/png");
 
-  reader.onloadend = function () {
-    const entry = {
-      serial: document.getElementById("serial").value,
-      digits: document.getElementById("digits").value,
-      sum: document.getElementById("sum").value,
-      crossSum: document.getElementById("crossSum").value,
-      verticalDigits: document.getElementById("verticalDigits")?.value || "",
-      verticalCrossSum: document.getElementById("verticalCrossSum")?.value || "",
-      country: document.getElementById("code").value,
-      date: document.getElementById("date").value,
-      name: document.getElementById("authorName").value || "Unbekannt",
-      img: reader.result
-    };
-
-    fetch("/.netlify/functions/saveToGitHub", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(entry)
-    })
-      .then(response => response.json())
-      .then(data => {
-        alert("✅ Analyse wurde erfolgreich gespeichert!");
-        window.location.href = "dokumentation.html";
-      })
-      .catch(err => {
-        alert("❌ Fehler beim Speichern: " + err.message);
-      });
+  const entry = {
+    serial: document.getElementById("serial").value,
+    digits: document.getElementById("digits").value,
+    sum: document.getElementById("sum").value,
+    crossSum: document.getElementById("crossSum").value,
+    verticalSum: document.getElementById("verticalCrossSum")?.value || "",
+    country: document.getElementById("code").value,
+    date: document.getElementById("date").value,
+    name: document.getElementById("authorName").value || "Unbekannt",
+    img: imgBase64  // 👈 Base64 statt blob-URL
   };
+
+  fetch("/.netlify/functions/saveToGitHub", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entry)
+  })
+    .then(response => response.json())
+    .then(() => {
+      alert("✅ Analyse wurde erfolgreich gespeichert!");
+      window.location.href = "dokumentation.html";
+    })
+    .catch(err => {
+      alert("❌ Fehler beim Speichern: " + err.message);
+    });
+}
+
 
   reader.readAsDataURL(file);
 }
