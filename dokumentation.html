@@ -14,10 +14,11 @@
     </nav>
     <h1>📄 Dokumentierte Scheine</h1>
     <div id="entries"></div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const params = new URLSearchParams(window.location.search);
-            const data = JSON.parse(decodeURIComponent(params.get("data") || "[]"));
+   <script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("docs/entries.json")
+        .then(response => response.json())
+        .then(data => {
             const container = document.getElementById("entries");
 
             data.forEach(entry => {
@@ -35,7 +36,12 @@
                 `;
                 container.appendChild(block);
             });
+        })
+        .catch(error => {
+            document.getElementById("entries").innerText = "⚠️ Fehler beim Laden der Daten.";
+            console.error("Fehler beim Laden von entries.json:", error);
         });
-    </script>
+});
+</script>
 </body>
 </html>
