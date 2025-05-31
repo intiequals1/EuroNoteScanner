@@ -15,7 +15,7 @@
     </nav>
 
     <main>
-        <h1>📄 Dokumentierte Scheine</h1>
+        <h1>Dokumentierte Scheine</h1>
         
         <div class="info-card">
             <div class="info-card-header">
@@ -51,13 +51,13 @@
                 </div>
                 <div>
                     <label>Nach Ländercode filtern:</label>
-                    <select id="filterCountry" onchange="filterEntries()" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 0.75rem 1rem; color: var(--text-primary); width: 100%;">
+                    <select id="filterCountry" onchange="filterEntries()">
                         <option value="">Alle Länder</option>
                     </select>
                 </div>
                 <div>
                     <label>Nach Verfasser filtern:</label>
-                    <select id="filterAuthor" onchange="filterEntries()" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 0.75rem 1rem; color: var(--text-primary); width: 100%;">
+                    <select id="filterAuthor" onchange="filterEntries()">
                         <option value="">Alle Verfasser</option>
                     </select>
                 </div>
@@ -66,10 +66,13 @@
 
         <div style="text-align: center; margin: 2rem 0;">
             <button onclick="exportData()" class="secondary">
-                📥 Daten exportieren (JSON)
+                Daten exportieren (JSON)
             </button>
             <button onclick="refreshData()">
-                🔄 Daten aktualisieren
+                Daten aktualisieren
+            </button>
+            <button onclick="testGitHubConnection()" class="secondary">
+                GitHub-Verbindung testen
             </button>
         </div>
 
@@ -79,6 +82,7 @@
 
         <div id="errorIndicator" class="warning-card" style="text-align: center; display: none;">
             <div class="error">Fehler beim Laden der Daten</div>
+            <div id="errorDetails" style="margin-top: 1rem; font-size: 0.9rem;"></div>
         </div>
 
         <div id="entries"></div>
@@ -97,17 +101,21 @@
     </main>
 
     <script>
+        console.log("📄 Dokumentation startet...");
+        
         let allEntries = [];
         let filteredEntries = [];
 
         // Daten beim Laden der Seite laden
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("🎯 DOM geladen, starte Datenabfrage...");
             loadEntries();
         });
 
         async function loadEntries() {
             const loadingIndicator = document.getElementById('loadingIndicator');
             const errorIndicator = document.getElementById('errorIndicator');
+            const errorDetails = document.getElementById('errorDetails');
             const entriesContainer = document.getElementById('entries');
             const noResults = document.getElementById('noResults');
 
@@ -117,33 +125,112 @@
             entriesContainer.innerHTML = '';
             noResults.style.display = 'none';
 
+            console.log("🔄 Versuche Daten zu laden...");
+
             try {
-                const response = await fetch("docs/entries.json");
+                // METHODE 1: Versuche zuerst die direkte JSON-Datei
+                console.log("📂 Versuche docs/entries.json zu laden...");
+                let response = await fetch("docs/entries.json?t=" + Date.now());
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    console.warn("⚠️ docs/entries.json nicht gefunden, versuche GitHub API...");
+                    throw new Error(`JSON-Datei nicht gefunden (${response.status})`);
                 }
-                
-                allEntries = await response.json();
-                filteredEntries = [...allEntries];
-                
-                // Loading verstecken
-                loadingIndicator.style.display = 'none';
-                
-                if (allEntries.length === 0) {
-                    noResults.style.display = 'block';
-                    return;
-                }
-
-                updateStatistics();
-                populateFilters();
-                displayEntries();
-                
             } catch (error) {
-                console.error("Fehler beim Laden der Einträge:", error);
-                loadingIndicator.style.display = 'none';
+                console.error("Fehler beim Laden der Daten:", error);
+                
+                // Zeige Fehlermeldung
+                errorDetails.innerHTML = `
+                    <strong>Fehler beim Laden der Daten:</strong><br>
+                    ${error.message}<br><br>
+                    <details>
+                        <summary>Technische Details</summary>
+                        <pre style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 5px; margin-top: 0.5rem;">${error.stack || error}</pre>
+                    </details>
+                `;
                 errorIndicator.style.display = 'block';
-                errorIndicator.querySelector('.error').textContent = `Fehler beim Laden: ${error.message}`;
+                allEntries = [];
+                
+                const data = await response.text();
+                console.log("📄 JSON-Datei Inhalt:", data.substring(0, 200) + "...");
+                
+                allEntries = JSON.parse(data);
+                console.log("✅ Einträge aus JSON-Datei geladen:", allEntries.length);
+                
+            } catch (jsonError) {
+                console.log("🔄 JSON-Datei Fehler, versuche GitHub API:", jsonError.message);
+                
+                try {
+                    // METHODE 2: GitHub API über Netlify Function
+                    console.log("📡 Versuche GitHub API über Netlify Function...");
+                    response = await fetch("/.netlify/functions/getEntries", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error("❌ Netlify Function Fehler:", errorText);
+                        throw new Error(`GitHub API Fehler (${response.status}): ${errorText}`);
+                    }
+                    
+                    const apiData = await response.json();
+                    console.log("📊 GitHub API Response:", apiData);
+                    
+                    allEntries = apiData.entries || [];
+                    console.log("✅ Einträge aus GitHub API geladen:", allEntries.length);
+                    
+                } catch (apiError) {
+                    console.error("GitHub API Fehler:", apiError);
+                    
+                    // Kein Fallback - zeige nur echte Daten
+                    throw apiError;
+                }
+            }
+            
+            // Loading verstecken
+            loadingIndicator.style.display = 'none';
+            
+            // Daten verarbeiten
+            filteredEntries = [...allEntries];
+            
+            if (allEntries.length === 0) {
+                noResults.style.display = 'block';
+                console.log("📭 Keine Einträge gefunden");
+                return;
+            }
+
+            console.log("🎯 Verarbeite", allEntries.length, "Einträge...");
+            updateStatistics();
+            populateFilters();
+            displayEntries();
+        }
+
+        function createDemoData() {
+            // Keine Demo-Daten - nur echte Daten anzeigen
+            return [];
+        }
+
+        async function testGitHubConnection() {
+            console.log("🔗 Teste GitHub-Verbindung...");
+            
+            try {
+                const response = await fetch("/.netlify/functions/getEntries", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(`GitHub-Verbindung erfolgreich!\n\nGefundene Einträge: ${data.entries?.length || 0}\nStatus: ${data.status || 'OK'}`);
+                } else {
+                    const errorText = await response.text();
+                    alert(`GitHub-Verbindung fehlgeschlagen!\n\nStatus: ${response.status}\nFehler: ${errorText}`);
+                }
+            } catch (error) {
+                alert(`Verbindungsfehler!\n\nFehler: ${error.message}`);
             }
         }
 
@@ -153,7 +240,11 @@
             if (allEntries.length > 0) {
                 // Letztes Datum finden
                 const dates = allEntries.map(entry => new Date(entry.date)).sort((a, b) => b - a);
-                document.getElementById('lastAnalysis').value = dates[0].toLocaleDateString('de-DE');
+                if (dates[0] && !isNaN(dates[0])) {
+                    document.getElementById('lastAnalysis').value = dates[0].toLocaleDateString('de-DE');
+                } else {
+                    document.getElementById('lastAnalysis').value = "Unbekannt";
+                }
                 
                 // Häufigster Ländercode
                 const countryCounts = {};
@@ -199,7 +290,7 @@
             const filterAuthor = document.getElementById('filterAuthor').value;
 
             filteredEntries = allEntries.filter(entry => {
-                const matchesSerial = !searchSerial || entry.serial.toLowerCase().includes(searchSerial);
+                const matchesSerial = !searchSerial || (entry.serial && entry.serial.toLowerCase().includes(searchSerial));
                 const matchesCountry = !filterCountry || entry.country === filterCountry;
                 const matchesAuthor = !filterAuthor || entry.name === filterAuthor;
                 
@@ -223,27 +314,42 @@
             noResults.style.display = 'none';
             
             // Einträge nach Datum sortieren (neueste zuerst)
-            const sortedEntries = [...filteredEntries].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const sortedEntries = [...filteredEntries].sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateB - dateA;
+            });
             
             sortedEntries.forEach((entry, index) => {
                 const block = document.createElement("div");
                 block.className = "entry fade-in";
                 block.style.animationDelay = `${index * 0.1}s`;
                 
-                // Zusätzliche Berechnungen
+                // Sichere Datumsverwaltung
+                let analysisDate = "Unbekanntes Datum";
+                try {
+                    const date = new Date(entry.date);
+                    if (!isNaN(date)) {
+                        analysisDate = date.toLocaleDateString('de-DE', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                } catch (e) {
+                    console.warn("Datum konnte nicht verarbeitet werden:", entry.date);
+                }
+                
+                // Sichere Werte
                 const digitSum = entry.sum || 0;
                 const crossSum = entry.crossSum || 0;
-                const analysisDate = new Date(entry.date).toLocaleDateString('de-DE', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
+                const entryNumber = allEntries.length - allEntries.indexOf(entry);
                 
                 block.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h4>🏦 Banknote #${allEntries.length - allEntries.indexOf(entry)}</h4>
+                        <h4>🏦 Banknote #${entryNumber}</h4>
                         <span style="color: var(--text-secondary); font-size: 0.9rem;">${analysisDate}</span>
                     </div>
                     
@@ -285,16 +391,19 @@
                         <img src="${entry.img || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="150"><rect width="100%" height="100%" fill="%23f0f0f0"/><text x="50%" y="50%" text-anchor="middle" fill="%23999">Kein Bild verfügbar</text></svg>'}" 
                              width="300" 
                              alt="Banknote ${entry.serial}"
+                             style="border-radius: 15px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);"
                              onerror="this.src='data:image/svg+xml,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"300\\" height=\\"150\\"><rect width=\\"100%\\" height=\\"100%\\" fill=\\"%23f0f0f0\\"/><text x=\\"50%\\" y=\\"50%\\" text-anchor=\\"middle\\" fill=\\"%23999\\">Bild nicht verfügbar</text></svg>'">
                     </div>
                 `;
                 container.appendChild(block);
             });
+            
+            console.log("Anzeige von", sortedEntries.length, "Einträgen abgeschlossen");
         }
 
         function exportData() {
             if (allEntries.length === 0) {
-                alert('❌ Keine Daten zum Exportieren verfügbar.');
+                alert('Keine Daten zum Exportieren verfügbar.');
                 return;
             }
 
@@ -307,9 +416,12 @@
             linkElement.setAttribute('href', dataUri);
             linkElement.setAttribute('download', exportFileDefaultName);
             linkElement.click();
+            
+            console.log("Export gestartet:", exportFileDefaultName);
         }
 
         function refreshData() {
+            console.log("Aktualisiere Daten...");
             loadEntries();
         }
 
@@ -330,6 +442,8 @@
             }
         `;
         document.head.appendChild(style);
+        
+        console.log("Dokumentation-Script geladen");
     </script>
 </body>
 </html>
