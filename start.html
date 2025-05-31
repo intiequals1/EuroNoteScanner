@@ -1,48 +1,139 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="favicon.png" type="image/png">
-    <title>Willkommen – EuroNoteScanner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EuroNoteScanner - Willkommen</title>
+    <link rel="icon" href="favicon.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
-        <a href="start.html">🏠 Start</a>
+        <a href="start.html" class="active">🏠 Start</a>
         <a href="index.html">🔍 Analyse</a>
         <a href="dokumentation.html">📄 Dokumentation</a>
     </nav>
-    <h1>💶 EuroNoteScanner</h1>
-    <p>Dieses Projekt dient der strukturierten Dokumentation von Euro-Banknoten durch Fotoanalyse und OCR-Verarbeitung.</p>
-    <p><strong>Konzeption:</strong> Claudiu Dangulea</p>
-    <p><strong>Technische Umsetzung:</strong> ChatGPT (OpenAI), basierend auf den Anforderungen von Claudiu</p>
 
-    <h2>🧾 Wie funktioniert EuroNoteScanner?</h2>
+    <main>
+        <h1>💶 EuroNoteScanner</h1>
+        
+        <div class="info-card">
+            <div class="info-card-header">
+                <span>🎯</span>
+                <span>Projektbeschreibung</span>
+            </div>
+            <p>EuroNoteScanner ist ein innovatives Werkzeug zur strukturierten Dokumentation physischer Euro-Banknoten durch fortschrittliche KI-gestützte Bildanalyse und OCR-Technologie.</p>
+            <p>Dieses Projekt kombiniert moderne Webtechnologien mit praktischer Anwendung für wissenschaftliche und edukative Zwecke.</p>
+        </div>
 
-<p><strong>EuroNoteScanner</strong> ist ein Werkzeug zur strukturierten Dokumentation physischer Euro-Banknoten. Es ermöglicht die automatische Analyse von Seriennummern und verwandten Merkmalen durch Fotoerkennung.</p>
+        <div class="info-card">
+            <div class="info-card-header">
+                <span>👥</span>
+                <span>Entwicklung & Konzeption</span>
+            </div>
+            <p><strong>Konzeption & Projektleitung:</strong> Claudiu Dangulea</p>
+            <p><strong>Technische Umsetzung:</strong> KI-gestützte Entwicklung mit Claude (Anthropic)</p>
+            <p><strong>Design-Inspiration:</strong> Opera Neon Browser - Futuristisches Interface Design</p>
+        </div>
 
-<h3>So funktioniert’s – Schritt für Schritt:</h3>
+        <div class="steps-container">
+            <h2>🔬 Funktionsweise im Detail</h2>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Bildaufnahme & Upload</h4>
+                    <p>Hochauflösende Erfassung der Banknote mit automatischer Bildvalidierung und Formatkonvertierung für optimale OCR-Verarbeitung.</p>
+                </div>
+            </div>
 
-<ol>
-    <li><strong>Banknote bereitlegen:</strong> Lege einen Euro-Schein (z. B. 5€, 10€, 20€) auf eine ebene Fläche.</li>
-    <li><strong>Zur Analyse-Seite gehen:</strong> Klicke oben auf <a href="index.html">🔍 Analyse</a>.</li>
-    <li><strong>Foto machen oder Bild hochladen:</strong> Wähle ein klares Bild des Scheins – es sollte keine anderen Gegenstände oder Personen zeigen.</li>
-    <li><strong>„Bild analysieren“ klicken:</strong> Die App erkennt automatisch die Seriennummer und berechnet:
-        <ul>
-            <li>die <strong>Ziffernfolge</strong> der Seriennummer</li>
-            <li>die <strong>Ziffernsumme</strong> und die <strong>Quersumme</strong></li>
-            <li>den <strong>Ländercode</strong> anhand der Buchstaben der Seriennummer</li>
-            <li>und die <strong>Analysezeit</strong></li>
-        </ul>
-    </li>
-    <li><strong>Ergebnisse bearbeiten:</strong> Alle Ergebnisse können vor dem Speichern manuell korrigiert werden (z. B. bei Doppelnennung von Buchstaben oder Erkennungsfehlern).</li>
-    <li><strong>Verfassername eingeben & speichern:</strong> Optional kann ein Verfassername angegeben werden. Anschließend wird das Ergebnis in der Dokumentation abgelegt.</li>
-</ol>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>KI-gestützte Texterkennung</h4>
+                    <p>Tesseract.js OCR-Engine analysiert das Bild lokal im Browser und extrahiert präzise Textinformationen unter Verwendung fortschrittlicher Machine Learning Algorithmen.</p>
+                </div>
+            </div>
 
-<h3>Verantwortungsvoller Umgang:</h3>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Datenextraktion & Analyse</h4>
+                    <p>Automatische Erkennung und Validierung der Euro-Seriennummer (Format: 1-2 Buchstaben + 10-11 Ziffern), Berechnung mathematischer Eigenschaften und Ländercode-Identifikation.</p>
+                </div>
+            </div>
 
-<p>Bitte verwende dieses Tool ausschließlich zur sachlichen Auseinandersetzung mit Euro-Banknoten. Achte darauf, nur Bilder zu verwenden, die keine Gesichter oder privaten Informationen zeigen. Alle Berechnungen erfolgen lokal im Browser. Die Daten können auf Wunsch dauerhaft dokumentiert werden.</p>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Sichere Dokumentation</h4>
+                    <p>Verschlüsselte Speicherung in privatem GitHub-Repository mit vollständiger Datenintegrität und Nachverfolgbarkeit aller Änderungen.</p>
+                </div>
+            </div>
+        </div>
 
+        <div class="info-card">
+            <div class="info-card-header">
+                <span>🔧</span>
+                <span>Technologie-Stack</span>
+            </div>
+            <ul>
+                <li><strong>Frontend:</strong> Vanilla JavaScript, HTML5, CSS3 mit Glassmorphismus Design</li>
+                <li><strong>OCR-Engine:</strong> Tesseract.js v2 - WebAssembly-basierte Texterkennung</li>
+                <li><strong>Deployment:</strong> Netlify mit serverless Functions</li>
+                <li><strong>Storage:</strong> GitHub API für sichere Datenpersistierung</li>
+                <li><strong>Design-System:</strong> Opera Neon-inspirierte Benutzeroberfläche</li>
+                <li><strong>Performance:</strong> Client-side Verarbeitung für Datenschutz und Geschwindigkeit</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <div class="info-card-header">
+                <span>🎯</span>
+                <span>Anwendungsbereiche</span>
+            </div>
+            <ul>
+                <li><strong>Wissenschaftliche Forschung:</strong> Analyse von Banknoten-Verteilungsmustern</li>
+                <li><strong>Bildungszwecke:</strong> Demonstration von OCR-Technologie und Datenanalyse</li>
+                <li><strong>Numismatik:</strong> Dokumentation für Sammler und Forscher</li>
+                <li><strong>Technologie-Demonstration:</strong> Showcase moderner Web-APIs</li>
+            </ul>
+        </div>
+
+        <div class="warning-card">
+            <div class="info-card-header">
+                <span>⚖️</span>
+                <span>Rechtliche Compliance</span>
+            </div>
+            <p>Dieses Projekt wurde unter strenger Beachtung geltender Gesetze entwickelt:</p>
+            <ul>
+                <li>Vollständige DSGVO-Konformität mit lokaler Datenverarbeitung</li>
+                <li>Keine kommerzielle Nutzung oder Weiterverkauf von Daten</li>
+                <li>Respektierung von Urheberrechten und Persönlichkeitsrechten</li>
+                <li>Transparente Datenverarbeitung und Nutzeraufklärung</li>
+                <li>Open-Source Lizenzierung unter MIT License</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin: 3rem 0;">
+            <a href="index.html">
+                <button style="font-size: 1.2rem; padding: 1.5rem 3rem;">
+                    🚀 Analyse starten
+                </button>
+            </a>
+            <a href="dokumentation.html">
+                <button class="secondary" style="font-size: 1.2rem; padding: 1.5rem 3rem;">
+                    📚 Dokumentation ansehen
+                </button>
+            </a>
+        </div>
+
+        <div class="info-card" style="text-align: center; margin-top: 3rem;">
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                <strong>Version 2.0</strong> - Dezember 2024<br>
+                Entwickelt mit modernsten Webtechnologien für optimale Benutzererfahrung
+            </p>
+        </div>
+    </main>
 </body>
 </html>

@@ -2,41 +2,337 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Dokumentation</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EuroNoteScanner - Dokumentation</title>
     <link rel="icon" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
         <a href="start.html">🏠 Start</a>
         <a href="index.html">🔍 Analyse</a>
-        <a href="dokumentation.html">📄 Dokumentation</a>
+        <a href="dokumentation.html" class="active">📄 Dokumentation</a>
     </nav>
-    <h1>📄 Dokumentierte Scheine</h1>
-    <div id="entries"></div>
+
+    <main>
+        <h1>📄 Dokumentierte Scheine</h1>
+        
+        <div class="info-card">
+            <div class="info-card-header">
+                <span>📊</span>
+                <span>Übersicht</span>
+            </div>
+            <p>Hier finden Sie alle dokumentierten Euro-Banknoten mit detaillierten Analyseergebnissen. Die Daten werden sicher und verschlüsselt gespeichert.</p>
+            <div id="statisticsContainer" style="margin-top: 1rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="result-item">
+                        <label>Gesamt analysiert:</label>
+                        <input id="totalCount" readonly value="0">
+                    </div>
+                    <div class="result-item">
+                        <label>Letzte Analyse:</label>
+                        <input id="lastAnalysis" readonly value="-">
+                    </div>
+                    <div class="result-item">
+                        <label>Häufigster Ländercode:</label>
+                        <input id="mostCommonCountry" readonly value="-">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-card-header">
+                <span>🔍</span>
+                <span>Filter & Suche</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div>
+                    <label>Nach Seriennummer suchen:</label>
+                    <input type="text" id="searchSerial" placeholder="z.B. EA1234567890" oninput="filterEntries()">
+                </div>
+                <div>
+                    <label>Nach Ländercode filtern:</label>
+                    <select id="filterCountry" onchange="filterEntries()" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 0.75rem 1rem; color: var(--text-primary); width: 100%;">
+                        <option value="">Alle Länder</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Nach Verfasser filtern:</label>
+                    <select id="filterAuthor" onchange="filterEntries()" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 0.75rem 1rem; color: var(--text-primary); width: 100%;">
+                        <option value="">Alle Verfasser</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 2rem 0;">
+            <button onclick="exportData()" class="secondary">
+                📥 Daten exportieren (JSON)
+            </button>
+            <button onclick="refreshData()">
+                🔄 Daten aktualisieren
+            </button>
+        </div>
+
+        <div id="loadingIndicator" class="info-card" style="text-align: center; display: none;">
+            <div class="loading">Lade Dokumentation...</div>
+        </div>
+
+        <div id="errorIndicator" class="warning-card" style="text-align: center; display: none;">
+            <div class="error">Fehler beim Laden der Daten</div>
+        </div>
+
+        <div id="entries"></div>
+
+        <div id="noResults" class="info-card" style="text-align: center; display: none;">
+            <div class="info-card-header">
+                <span>🔍</span>
+                <span>Keine Ergebnisse</span>
+            </div>
+            <p>Es wurden noch keine Banknoten dokumentiert oder Ihre Suchkriterien ergaben keine Treffer.</p>
+            <a href="index.html">
+                <button style="margin-top: 1rem;">
+                    🚀 Erste Analyse starten
+                </button>
+            </a>
+        </div>
+    </main>
+
     <script>
-        fetch("docs/entries.json")
-          .then(response => response.json())
-          .then(data => {
-            const container = document.getElementById("entries");
-            data.forEach(entry => {
-              const block = document.createElement("div");
-              block.className = "entry";
-              block.innerHTML = `
-                <p><strong>Verfasser:</strong> ${entry.name}</p>
-                <p><strong>Seriennummer:</strong> ${entry.serial}</p>
-                <p><strong>Ziffernfolge:</strong> ${entry.digits}</p>
-                <p><strong>Ziffernsumme:</strong> ${entry.sum}</p>
-                <p><strong>Quersumme:</strong> ${entry.crossSum}</p>
-                <p><strong>Vertikale Ziffernfolge:</strong> ${entry.verticalDigits || '-'}</p>
-                <p><strong>Quersumme (vertikal):</strong> ${entry.verticalCrossSum || '-'}</p>
-                <p><strong>Ländercode:</strong> ${entry.country}</p>
-                <p><strong>Datum:</strong> ${entry.date}</p>
-                <img src="${entry.img}" width="300">
-              `;
-              container.appendChild(block);
+        let allEntries = [];
+        let filteredEntries = [];
+
+        // Daten beim Laden der Seite laden
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEntries();
+        });
+
+        async function loadEntries() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const errorIndicator = document.getElementById('errorIndicator');
+            const entriesContainer = document.getElementById('entries');
+            const noResults = document.getElementById('noResults');
+
+            // Loading anzeigen
+            loadingIndicator.style.display = 'block';
+            errorIndicator.style.display = 'none';
+            entriesContainer.innerHTML = '';
+            noResults.style.display = 'none';
+
+            try {
+                const response = await fetch("docs/entries.json");
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                allEntries = await response.json();
+                filteredEntries = [...allEntries];
+                
+                // Loading verstecken
+                loadingIndicator.style.display = 'none';
+                
+                if (allEntries.length === 0) {
+                    noResults.style.display = 'block';
+                    return;
+                }
+
+                updateStatistics();
+                populateFilters();
+                displayEntries();
+                
+            } catch (error) {
+                console.error("Fehler beim Laden der Einträge:", error);
+                loadingIndicator.style.display = 'none';
+                errorIndicator.style.display = 'block';
+                errorIndicator.querySelector('.error').textContent = `Fehler beim Laden: ${error.message}`;
+            }
+        }
+
+        function updateStatistics() {
+            document.getElementById('totalCount').value = allEntries.length;
+            
+            if (allEntries.length > 0) {
+                // Letztes Datum finden
+                const dates = allEntries.map(entry => new Date(entry.date)).sort((a, b) => b - a);
+                document.getElementById('lastAnalysis').value = dates[0].toLocaleDateString('de-DE');
+                
+                // Häufigster Ländercode
+                const countryCounts = {};
+                allEntries.forEach(entry => {
+                    const country = entry.country || 'Unbekannt';
+                    countryCounts[country] = (countryCounts[country] || 0) + 1;
+                });
+                
+                const mostCommon = Object.entries(countryCounts)
+                    .sort(([,a], [,b]) => b - a)[0];
+                document.getElementById('mostCommonCountry').value = mostCommon ? `${mostCommon[0]} (${mostCommon[1]}x)` : '-';
+            }
+        }
+
+        function populateFilters() {
+            const countryFilter = document.getElementById('filterCountry');
+            const authorFilter = document.getElementById('filterAuthor');
+            
+            // Länder extrahieren
+            const countries = [...new Set(allEntries.map(entry => entry.country).filter(Boolean))].sort();
+            countryFilter.innerHTML = '<option value="">Alle Länder</option>';
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                countryFilter.appendChild(option);
             });
-          });
+            
+            // Verfasser extrahieren
+            const authors = [...new Set(allEntries.map(entry => entry.name).filter(name => name && name !== 'Unbekannt'))].sort();
+            authorFilter.innerHTML = '<option value="">Alle Verfasser</option>';
+            authors.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author;
+                option.textContent = author;
+                authorFilter.appendChild(option);
+            });
+        }
+
+        function filterEntries() {
+            const searchSerial = document.getElementById('searchSerial').value.toLowerCase();
+            const filterCountry = document.getElementById('filterCountry').value;
+            const filterAuthor = document.getElementById('filterAuthor').value;
+
+            filteredEntries = allEntries.filter(entry => {
+                const matchesSerial = !searchSerial || entry.serial.toLowerCase().includes(searchSerial);
+                const matchesCountry = !filterCountry || entry.country === filterCountry;
+                const matchesAuthor = !filterAuthor || entry.name === filterAuthor;
+                
+                return matchesSerial && matchesCountry && matchesAuthor;
+            });
+
+            displayEntries();
+        }
+
+        function displayEntries() {
+            const container = document.getElementById("entries");
+            const noResults = document.getElementById('noResults');
+            
+            container.innerHTML = "";
+            
+            if (filteredEntries.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            // Einträge nach Datum sortieren (neueste zuerst)
+            const sortedEntries = [...filteredEntries].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedEntries.forEach((entry, index) => {
+                const block = document.createElement("div");
+                block.className = "entry fade-in";
+                block.style.animationDelay = `${index * 0.1}s`;
+                
+                // Zusätzliche Berechnungen
+                const digitSum = entry.sum || 0;
+                const crossSum = entry.crossSum || 0;
+                const analysisDate = new Date(entry.date).toLocaleDateString('de-DE', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                block.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h4>🏦 Banknote #${allEntries.length - allEntries.indexOf(entry)}</h4>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">${analysisDate}</span>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div class="result-item">
+                            <label>👤 Verfasser:</label>
+                            <input readonly value="${entry.name || 'Unbekannt'}">
+                        </div>
+                        <div class="result-item">
+                            <label>🔢 Seriennummer:</label>
+                            <input readonly value="${entry.serial || '-'}">
+                        </div>
+                        <div class="result-item">
+                            <label>🌍 Ländercode:</label>
+                            <input readonly value="${entry.country || '-'}">
+                        </div>
+                        <div class="result-item">
+                            <label>🧮 Ziffernsumme:</label>
+                            <input readonly value="${digitSum}">
+                        </div>
+                        <div class="result-item">
+                            <label>➕ Quersumme:</label>
+                            <input readonly value="${crossSum}">
+                        </div>
+                        <div class="result-item">
+                            <label>📊 Vertikale Quersumme:</label>
+                            <input readonly value="${entry.verticalCrossSum || '-'}">
+                        </div>
+                    </div>
+                    
+                    ${entry.verticalDigits ? `
+                        <div class="result-item" style="margin-bottom: 1.5rem;">
+                            <label>🔢 Vertikale Ziffernfolge:</label>
+                            <input readonly value="${entry.verticalDigits}">
+                        </div>
+                    ` : ''}
+                    
+                    <div class="image-preview">
+                        <img src="${entry.img || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="150"><rect width="100%" height="100%" fill="%23f0f0f0"/><text x="50%" y="50%" text-anchor="middle" fill="%23999">Kein Bild verfügbar</text></svg>'}" 
+                             width="300" 
+                             alt="Banknote ${entry.serial}"
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"300\\" height=\\"150\\"><rect width=\\"100%\\" height=\\"100%\\" fill=\\"%23f0f0f0\\"/><text x=\\"50%\\" y=\\"50%\\" text-anchor=\\"middle\\" fill=\\"%23999\\">Bild nicht verfügbar</text></svg>'">
+                    </div>
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        function exportData() {
+            if (allEntries.length === 0) {
+                alert('❌ Keine Daten zum Exportieren verfügbar.');
+                return;
+            }
+
+            const dataStr = JSON.stringify(allEntries, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `euronotescanner-export-${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        function refreshData() {
+            loadEntries();
+        }
+
+        // CSS für Animationen
+        const style = document.createElement('style');
+        style.textContent = `
+            .fade-in {
+                animation: fadeInUp 0.6s ease-out forwards;
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            
+            @keyframes fadeInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
