@@ -1,28 +1,204 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EuroNoteScanner - AI-gestützte Banknoten-Analyse</title>
     <link rel="icon" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="start.html">🏠 Start</a>
+        <a href="index.html" class="active">🔍 Analyse</a>
+        <a href="dokumentation.html">📄 Dokumentation</a>
+    </nav>
 
-    <!-- ERSETZEN Sie in index.html: -->
+    <main>
+        <h1>📸 Euro-Schein Analyse</h1>
+        
+        <!-- Anleitung -->
+        <div class="steps-container">
+            <h2>🚀 So funktioniert die Analyse</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Banknote vorbereiten</h4>
+                    <p>Legen Sie einen Euro-Schein auf eine ebene, gut beleuchtete Fläche. Achten Sie darauf, dass die Seriennummer klar sichtbar ist.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Foto aufnehmen oder hochladen</h4>
+                    <p>Nutzen Sie das Upload-Feld unten oder ziehen Sie ein Bild direkt hinein. Die Seriennummer sollte scharf und ohne Reflexionen erkennbar sein.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Automatische Erkennung</h4>
+                    <p>Die KI analysiert das Bild und extrahiert automatisch die Seriennummer, berechnet Quersummen und identifiziert den Ländercode.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Überprüfung und Speicherung</h4>
+                    <p>Kontrollieren Sie die erkannten Daten, nehmen Sie bei Bedarf Korrekturen vor und speichern Sie die Dokumentation.</p>
+                </div>
+            </div>
+        </div>
 
-    <!-- ALT (entfernen): -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js"></script> -->
+        <!-- Wichtige Hinweise -->
+        <div class="collapsible">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <span>⚠️ Wichtige rechtliche und ethische Hinweise</span>
+                <span class="collapsible-icon">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="warning-card">
+                    <div class="info-card-header">
+                        <span>⚖️</span>
+                        <span>Rechtliche Aspekte</span>
+                    </div>
+                    <ul>
+                        <li><strong>Eigentum:</strong> Verwenden Sie nur Banknoten, die sich rechtmäßig in Ihrem Besitz befinden.</li>
+                        <li><strong>Datenschutz:</strong> Achten Sie darauf, keine persönlichen Informationen Dritter in Bildern zu erfassen.</li>
+                        <li><strong>Zweckbindung:</strong> Diese Software dient ausschließlich wissenschaftlichen und edukativen Zwecken.</li>
+                        <li><strong>Keine kommerzielle Nutzung:</strong> Die Dokumentation ist nicht für gewerbliche Zwecke bestimmt.</li>
+                    </ul>
+                </div>
 
-    <!-- NEU: Lazy Loading Script VOR dem schließenden </body> Tag: -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span>🛡️</span>
+                        <span>Ethische Verantwortung</span>
+                    </div>
+                    <ul>
+                        <li><strong>Kein Missbrauch:</strong> Verwenden Sie die Software nicht zur Fälschungserkennung oder ähnlichen Zwecken ohne entsprechende Berechtigung.</li>
+                        <li><strong>Transparenz:</strong> Informieren Sie andere Personen, falls deren Banknoten dokumentiert werden.</li>
+                        <li><strong>Datensicherheit:</strong> Behandeln Sie alle Daten vertraulich und geben Sie diese nicht unbefugt weiter.</li>
+                        <li><strong>Verantwortungsvoller Umgang:</strong> Nutzen Sie die gesammelten Informationen nur für legitime Zwecke.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span>🔒</span>
+                        <span>Datenschutz & Sicherheit</span>
+                    </div>
+                    <p>Ihre Daten werden wie folgt behandelt:</p>
+                    <ul>
+                        <li><strong>Lokale Verarbeitung:</strong> Die OCR-Analyse erfolgt direkt in Ihrem Browser.</li>
+                        <li><strong>Speicherung:</strong> Dokumentierte Einträge werden verschlüsselt in einem privaten GitHub-Repository gespeichert.</li>
+                        <li><strong>Keine Weitergabe:</strong> Ihre Daten werden nicht an Dritte weitergegeben oder verkauft.</li>
+                        <li><strong>Löschung:</strong> Sie können jederzeit die Löschung Ihrer Daten beantragen.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapsible">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <span>⚠️ Mögliche Risiken und Probleme</span>
+                <span class="collapsible-icon">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="warning-card">
+                    <div class="info-card-header">
+                        <span>🚨</span>
+                        <span>Technische Risiken</span>
+                    </div>
+                    <ul>
+                        <li><strong>OCR-Fehler:</strong> Die automatische Texterkennung kann Fehler enthalten - überprüfen Sie alle Ergebnisse manuell.</li>
+                        <li><strong>Bildqualität:</strong> Schlechte Bilder können zu falschen Erkennungen führen.</li>
+                        <li><strong>Browser-Kompatibilität:</strong> Nicht alle Browser unterstützen alle Funktionen gleich gut.</li>
+                        <li><strong>Speicher-Fehler:</strong> Bei der Online-Speicherung können technische Probleme auftreten.</li>
+                    </ul>
+                </div>
+
+                <div class="warning-card">
+                    <div class="info-card-header">
+                        <span>⚖️</span>
+                        <span>Rechtliche Risiken</span>
+                    </div>
+                    <ul>
+                        <li><strong>Urheberrecht:</strong> Banknoten-Designs können urheberrechtlich geschützt sein.</li>
+                        <li><strong>Persönlichkeitsrechte:</strong> Achten Sie darauf, keine Personen oder privaten Bereiche zu fotografieren.</li>
+                        <li><strong>Datenschutz-Verletzungen:</strong> Die unbefugte Dokumentation fremder Banknoten kann problematisch sein.</li>
+                        <li><strong>Missverständnisse:</strong> Die Nutzung könnte als verdächtige Aktivität missverstanden werden.</li>
+                    </ul>
+                </div>
+
+                <div class="warning-card">
+                    <div class="info-card-header">
+                        <span>🔐</span>
+                        <span>Sicherheitsrisiken</span>
+                    </div>
+                    <ul>
+                        <li><strong>Datendiebstahl:</strong> Unsichere Internetverbindungen könnten Daten kompromittieren.</li>
+                        <li><strong>Missbrauch:</strong> Die gesammelten Daten könnten für unbeabsichtigte Zwecke verwendet werden.</li>
+                        <li><strong>Identifikation:</strong> Banknoten-Muster könnten zur Rückverfolgung verwendet werden.</li>
+                        <li><strong>Social Engineering:</strong> Die Informationen könnten für Betrugsversuche missbraucht werden.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapsible">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <span>📋 Nutzungsvereinbarung</span>
+                <span class="collapsible-icon">▼</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="info-card">
+                    <p>Durch die Nutzung dieser Software bestätigen Sie, dass Sie:</p>
+                    <ul>
+                        <li>Die rechtlichen und ethischen Hinweise zur Kenntnis genommen haben</li>
+                        <li>Nur eigene oder rechtmäßig überlassene Banknoten dokumentieren</li>
+                        <li>Die Software nur für legitime, nicht-kommerzielle Zwecke nutzen</li>
+                        <li>Keine Rechte Dritter verletzen und datenschutzkonform handeln</li>
+                        <li>Verstehen, dass die automatische Erkennung fehlerhaft sein kann</li>
+                        <li>Die Verantwortung für die korrekte und rechtmäßige Nutzung übernehmen</li>
+                    </ul>
+                    <p><strong>Bei Unsicherheiten bezüglich der Rechtmäßigkeit Ihrer geplanten Nutzung konsultieren Sie bitte einen Rechtsanwalt.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Input versteckt -->
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+
+        <!-- Upload Area -->
+        <div class="upload-area" id="uploadArea">
+            <span class="upload-icon">📸</span>
+            <div class="upload-text">Klicken Sie hier oder ziehen Sie ein Bild hierher</div>
+            <div class="upload-hint">Unterstützte Formate: JPG, PNG, WEBP (max. 10MB)</div>
+        </div>
+        
+        <div style="text-align: center;">
+            <button onclick="analyzeNote()" id="analyzeBtn" disabled>
+                <span id="btnText">Bild analysieren</span>
+            </button>
+        </div>
+        
+        <div id="results"></div>
+    </main>
+
     <script>
+        console.log("🚀 EuroNoteScanner startet - Version 2.0");
+        
+        // Tesseract Lazy Loading
         let tesseractLoaded = false;
         let tesseractLoading = false;
 
         function loadTesseract() {
             if (tesseractLoaded || tesseractLoading) return Promise.resolve();
-
+            
             tesseractLoading = true;
             console.log("🔄 Lade Tesseract.js...");
-
+            
             return new Promise((resolve, reject) => {
                 const script = document.createElement('script');
                 script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@2/dist/tesseract.min.js';
@@ -41,408 +217,6 @@
             });
         }
 
-        // ANGEPASSTE analyzeNote Funktion:
-        async function analyzeNote() {
-            const start = performance.now();
-            const file = document.getElementById("imageInput").files[0];
-
-            if (!file) {
-                alert("Bitte wählen Sie zuerst ein Bild aus!");
-                return;
-            }
-
-            const results = document.getElementById("results");
-            const btnText = document.getElementById("btnText");
-            const analyzeBtn = document.getElementById("analyzeBtn");
-
-            // Update button state
-            analyzeBtn.disabled = true;
-            btnText.textContent = "Lade OCR-Engine...";
-
-            results.innerHTML = `
-        <div class="results-container">
-            <div class="loading">Lade Tesseract.js...</div>
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-            </div>
-        </div>
-    `;
-
-            try {
-                // Tesseract.js erst jetzt laden
-                await loadTesseract();
-
-                btnText.textContent = "Analysiere...";
-                results.innerHTML = `
-            <div class="results-container">
-                <div class="loading">Erkenne Text...</div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-                </div>
-            </div>
-        `;
-
-                const imgUrl = URL.createObjectURL(file);
-                console.log("Starte OCR-Analyse...");
-
-                // Rest der Funktion bleibt gleich...
-                Tesseract.recognize(file, 'eng', {
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            const progress = Math.round(m.progress * 100);
-                            const progressBar = document.getElementById('progressBar');
-                            const loadingText = document.querySelector('.loading');
-
-                            if (progressBar) progressBar.style.width = progress + '%';
-                            if (loadingText) loadingText.textContent = `Erkenne Text... ${progress}%`;
-                        }
-                    }
-                }).then(({ data: { text } }) => {
-                    // ... Rest der analyzeNote Funktion bleibt unverändert
-                    console.log("OCR Ergebnis:", text);
-
-                    const serialMatch = text.match(/[A-Z]{1,2}[0-9]{10,11}/);
-                    const serial = serialMatch ? serialMatch[0] : null;
-
-                    if (!serial) {
-                        results.innerHTML = `
-                    <div class="results-container">
-                        <div class="error">❌ Seriennummer konnte nicht erkannt werden. Bitte versuchen Sie es mit einem klareren Bild.</div>
-                    </div>
-                `;
-                        analyzeBtn.disabled = false;
-                        btnText.textContent = "Bild analysieren";
-                        return;
-                    }
-
-                    const digits = serial.replace(/\D/g, '').split('').map(d => parseInt(d));
-                    const sum = digits.reduce((a, b) => a + b, 0);
-                    const crossSum = sum.toString().split('').reduce((a, b) => a + parseInt(b), 0);
-                    const code = serial.replace(/[0-9]/g, '');
-                    const date = new Date().toLocaleString('de-DE');
-                    const duration = ((performance.now() - start) / 1000).toFixed(2);
-
-                    results.innerHTML = `
-                <div class="results-container">
-                    <h3>✅ Analyseergebnisse (bearbeitbar)</h3>
-                    <div class="results-grid">
-                        <div class="result-item">
-                            <label>Seriennummer:</label>
-                            <input id="serial" value="${serial}">
-                        </div>
-                        <div class="result-item">
-                            <label>Ziffernfolge:</label>
-                            <input id="digits" value="${digits.join(' ')}">
-                        </div>
-                        <div class="result-item">
-                            <label>Ziffernsumme:</label>
-                            <input id="sum" value="${sum}">
-                        </div>
-                        <div class="result-item">
-                            <label>Quersumme:</label>
-                            <input id="crossSum" value="${crossSum}">
-                        </div>
-                        <div class="result-item">
-                            <label>Ländercode:</label>
-                            <input id="code" value="${code}">
-                        </div>
-                        <div class="result-item">
-                            <label>Vertikale Ziffernfolge:</label>
-                            <input id="verticalDigits" oninput="calcVerticalCrossSum()" placeholder="Optional">
-                        </div>
-                        <div class="result-item">
-                            <label>Quersumme (vertikal):</label>
-                            <input id="verticalCrossSum" readonly>
-                        </div>
-                        <div class="result-item">
-                            <label>Aufnahmedatum:</label>
-                            <input id="date" value="${date}">
-                        </div>
-                        <div class="result-item">
-                            <label>⏱ Analysezeit:</label>
-                            <input readonly value="${duration} Sekunden">
-                        </div>
-                        <div class="result-item">
-                            <label>Verfasser:</label>
-                            <input id="authorName" placeholder="Ihr Name (optional)">
-                        </div>
-                    </div>
-                    
-                    <div class="image-preview">
-                        <img src="${imgUrl}" width="300" style="border-radius: 15px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 2rem;">
-                        <button onclick="saveEntry()">📄 Speichern & Dokumentieren</button>
-                        <button onclick="resetForm()" class="secondary">🔄 Zurücksetzen</button>
-                    </div>
-                </div>
-            `;
-
-                    analyzeBtn.disabled = false;
-                    btnText.textContent = "Bild analysieren";
-                    console.log("Analyse erfolgreich abgeschlossen");
-
-                }).catch(error => {
-                    console.error("OCR Fehler:", error);
-                    results.innerHTML = `
-                <div class="results-container">
-                    <div class="error">❌ Fehler bei der Texterkennung: ${error.message}</div>
-                </div>
-            `;
-                    analyzeBtn.disabled = false;
-                    btnText.textContent = "Bild analysieren";
-                });
-
-            } catch (error) {
-                console.error("Fehler beim Laden von Tesseract.js:", error);
-                results.innerHTML = `
-            <div class="results-container">
-                <div class="error">❌ OCR-Engine konnte nicht geladen werden. Bitte versuchen Sie es erneut.</div>
-            </div>
-        `;
-                analyzeBtn.disabled = false;
-                btnText.textContent = "Bild analysieren";
-            }
-        }
-
-        // Debug-Informationen
-        console.log("EuroNoteScanner geladen - Version 2.0 (Lazy Loading)");
-        console.log("Tesseract wird bei Bedarf geladen");
-    </script>
-
-    <script>
-        console.log("⏱️ Seite startet Laden:", new Date().toLocaleTimeString());
-
-        // Tesseract Ladezeit messen
-        let tesseractLoadStart = performance.now();
-        let tesseractCheckInterval = setInterval(() => {
-            if (typeof Tesseract !== 'undefined') {
-                clearInterval(tesseractCheckInterval);
-                let loadTime = ((performance.now() - tesseractLoadStart) / 1000).toFixed(2);
-                console.log("✅ Tesseract.js geladen nach:", loadTime + " Sekunden");
-            }
-        }, 100);
-
-        // Gesamte Seitenladezeit
-        window.addEventListener('load', function () {
-            console.log("✅ Seite vollständig geladen:", new Date().toLocaleTimeString());
-        });
-
-        // Performance Navigation Timing
-        window.addEventListener('load', function () {
-            setTimeout(() => {
-                const perfData = performance.getEntriesByType("navigation")[0];
-                console.log("📊 Ladezeiten:");
-                console.log("- DNS Lookup:", ((perfData.domainLookupEnd - perfData.domainLookupStart) / 1000).toFixed(2) + "s");
-                console.log("- Server Response:", ((perfData.responseEnd - perfData.requestStart) / 1000).toFixed(2) + "s");
-                console.log("- DOM laden:", ((perfData.domContentLoadedEventEnd - perfData.navigationStart) / 1000).toFixed(2) + "s");
-                console.log("- Komplett geladen:", ((perfData.loadEventEnd - perfData.navigationStart) / 1000).toFixed(2) + "s");
-            }, 100);
-        });
-    </script>
-
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <nav>
-        <a href="start.html">Start</a>
-        <a href="index.html" class="active">Analyse</a>
-        <a href="dokumentation.html">Dokumentation</a>
-    </nav>
-
-    <main>
-        <h1>Euro-Schein Analyse</h1>
-
-        <!-- Anleitung -->
-        <div class="steps-container">
-            <h2>So funktioniert die Analyse</h2>
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                    <h4>Banknote vorbereiten</h4>
-                    <p>Legen Sie einen Euro-Schein auf eine ebene, gut beleuchtete Fläche. Achten Sie darauf, dass die
-                        Seriennummer klar sichtbar ist.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                    <h4>Foto aufnehmen oder hochladen</h4>
-                    <p>Nutzen Sie das Upload-Feld unten oder ziehen Sie ein Bild direkt hinein. Die Seriennummer sollte
-                        scharf und ohne Reflexionen erkennbar sein.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                    <h4>Automatische Erkennung</h4>
-                    <p>Die KI analysiert das Bild und extrahiert automatisch die Seriennummer, berechnet Quersummen und
-                        identifiziert den Ländercode.</p>
-                </div>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h4>Überprüfung und Speicherung</h4>
-                    <p>Kontrollieren Sie die erkannten Daten, nehmen Sie bei Bedarf Korrekturen vor und speichern Sie
-                        die Dokumentation.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Wichtige Hinweise -->
-        <div class="collapsible">
-            <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                <span>Wichtige rechtliche und ethische Hinweise</span>
-                <span class="collapsible-icon">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <div class="warning-card">
-                    <div class="info-card-header">
-                        <span>Rechtliche Aspekte</span>
-                    </div>
-                    <ul>
-                        <li><strong>Eigentum:</strong> Verwenden Sie nur Banknoten, die sich rechtmäßig in Ihrem Besitz
-                            befinden.</li>
-                        <li><strong>Datenschutz:</strong> Achten Sie darauf, keine persönlichen Informationen Dritter in
-                            Bildern zu erfassen.</li>
-                        <li><strong>Zweckbindung:</strong> Diese Software dient ausschließlich wissenschaftlichen und
-                            edukativen Zwecken.</li>
-                        <li><strong>Keine kommerzielle Nutzung:</strong> Die Dokumentation ist nicht für gewerbliche
-                            Zwecke bestimmt.</li>
-                    </ul>
-                </div>
-
-                <div class="info-card">
-                    <div class="info-card-header">
-                        <span>Ethische Verantwortung</span>
-                    </div>
-                    <ul>
-                        <li><strong>Kein Missbrauch:</strong> Verwenden Sie die Software nicht zur Fälschungserkennung
-                            oder ähnlichen Zwecken ohne entsprechende Berechtigung.</li>
-                        <li><strong>Transparenz:</strong> Informieren Sie andere Personen, falls deren Banknoten
-                            dokumentiert werden.</li>
-                        <li><strong>Datensicherheit:</strong> Behandeln Sie alle Daten vertraulich und geben Sie diese
-                            nicht unbefugt weiter.</li>
-                        <li><strong>Verantwortungsvoller Umgang:</strong> Nutzen Sie die gesammelten Informationen nur
-                            für legitime Zwecke.</li>
-                    </ul>
-                </div>
-
-                <div class="info-card">
-                    <div class="info-card-header">
-                        <span>Datenschutz & Sicherheit</span>
-                    </div>
-                    <p>Ihre Daten werden wie folgt behandelt:</p>
-                    <ul>
-                        <li><strong>Lokale Verarbeitung:</strong> Die OCR-Analyse erfolgt direkt in Ihrem Browser.</li>
-                        <li><strong>Speicherung:</strong> Dokumentierte Einträge werden verschlüsselt in einem privaten
-                            GitHub-Repository gespeichert.</li>
-                        <li><strong>Keine Weitergabe:</strong> Ihre Daten werden nicht an Dritte weitergegeben oder
-                            verkauft.</li>
-                        <li><strong>Löschung:</strong> Sie können jederzeit die Löschung Ihrer Daten beantragen.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="collapsible">
-            <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                <span>Mögliche Risiken und Probleme</span>
-                <span class="collapsible-icon">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <div class="warning-card">
-                    <div class="info-card-header">
-                        <span>Technische Risiken</span>
-                    </div>
-                    <ul>
-                        <li><strong>OCR-Fehler:</strong> Die automatische Texterkennung kann Fehler enthalten -
-                            überprüfen Sie alle Ergebnisse manuell.</li>
-                        <li><strong>Bildqualität:</strong> Schlechte Bilder können zu falschen Erkennungen führen.</li>
-                        <li><strong>Browser-Kompatibilität:</strong> Nicht alle Browser unterstützen alle Funktionen
-                            gleich gut.</li>
-                        <li><strong>Speicher-Fehler:</strong> Bei der Online-Speicherung können technische Probleme
-                            auftreten.</li>
-                    </ul>
-                </div>
-
-                <div class="warning-card">
-                    <div class="info-card-header">
-                        <span>Rechtliche Risiken</span>
-                    </div>
-                    <ul>
-                        <li><strong>Urheberrecht:</strong> Banknoten-Designs können urheberrechtlich geschützt sein.
-                        </li>
-                        <li><strong>Persönlichkeitsrechte:</strong> Achten Sie darauf, keine Personen oder privaten
-                            Bereiche zu fotografieren.</li>
-                        <li><strong>Datenschutz-Verletzungen:</strong> Die unbefugte Dokumentation fremder Banknoten
-                            kann problematisch sein.</li>
-                        <li><strong>Missverständnisse:</strong> Die Nutzung könnte als verdächtige Aktivität
-                            missverstanden werden.</li>
-                    </ul>
-                </div>
-
-                <div class="warning-card">
-                    <div class="info-card-header">
-                        <span>Sicherheitsrisiken</span>
-                    </div>
-                    <ul>
-                        <li><strong>Datendiebstahl:</strong> Unsichere Internetverbindungen könnten Daten
-                            kompromittieren.</li>
-                        <li><strong>Missbrauch:</strong> Die gesammelten Daten könnten für unbeabsichtigte Zwecke
-                            verwendet werden.</li>
-                        <li><strong>Identifikation:</strong> Banknoten-Muster könnten zur Rückverfolgung verwendet
-                            werden.</li>
-                        <li><strong>Social Engineering:</strong> Die Informationen könnten für Betrugsversuche
-                            missbraucht werden.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="collapsible">
-            <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                <span>Nutzungsvereinbarung</span>
-                <span class="collapsible-icon">▼</span>
-            </div>
-            <div class="collapsible-content">
-                <div class="info-card">
-                    <p>Durch die Nutzung dieser Software bestätigen Sie, dass Sie:</p>
-                    <ul>
-                        <li>Die rechtlichen und ethischen Hinweise zur Kenntnis genommen haben</li>
-                        <li>Nur eigene oder rechtmäßig überlassene Banknoten dokumentieren</li>
-                        <li>Die Software nur für legitime, nicht-kommerzielle Zwecke nutzen</li>
-                        <li>Keine Rechte Dritter verletzen und datenschutzkonform handeln</li>
-                        <li>Verstehen, dass die automatische Erkennung fehlerhaft sein kann</li>
-                        <li>Die Verantwortung für die korrekte und rechtmäßige Nutzung übernehmen</li>
-                    </ul>
-                    <p><strong>Bei Unsicherheiten bezüglich der Rechtmäßigkeit Ihrer geplanten Nutzung konsultieren Sie
-                            bitte einen Rechtsanwalt.</strong></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upload Area -->
-        <div class="upload-area" onclick="document.getElementById('imageInput').click()">
-            ""<span class="upload-icon">upload</span>
-            <div class="upload-text">Klicken Sie hier oder ziehen Sie ein Bild hierher</div>
-            <div class="upload-hint">Unterstützte Formate: JPG, PNG, WEBP (max. 10MB)</div>
-            <input type="file" id="imageInput" accept="image/*">
-        </div>
-
-        <div style="text-align: center;">
-            <button onclick="analyzeNote()" id="analyzeBtn" disabled>
-                <span id="btnText">Bild analysieren</span>
-            </button>
-        </div>
-
-        <div id="results"></div>
-    </main>
-
-    <script>
         // Collapsible functionality
         function toggleCollapsible(header) {
             const collapsible = header.parentElement;
@@ -450,12 +224,23 @@
         }
 
         // File Upload Handling
-        const uploadArea = document.querySelector('.upload-area');
+        const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('imageInput');
         const analyzeBtn = document.getElementById('analyzeBtn');
 
-        // Enable/disable analyze button based on file selection
-        fileInput.addEventListener('change', function (e) {
+        // Upload-Area Click Handler
+        uploadArea.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("📸 Upload-Area geklickt");
+            fileInput.click();
+        });
+
+        // File Input Change Handler
+        fileInput.addEventListener('change', function(e) {
+            e.stopPropagation();
+            console.log("📁 Datei ausgewählt:", e.target.files[0]?.name);
+            
             const file = e.target.files[0];
             if (file) {
                 // Check file size (10MB limit)
@@ -465,7 +250,7 @@
                     analyzeBtn.disabled = true;
                     return;
                 }
-
+                
                 // Check file type
                 if (!file.type.startsWith('image/')) {
                     alert('❌ Bitte wählen Sie eine Bilddatei aus.');
@@ -474,6 +259,7 @@
                     return;
                 }
 
+                // Update Upload Area
                 uploadArea.innerHTML = `
                     <span class="upload-icon">✅</span>
                     <div class="upload-text">Datei ausgewählt: ${file.name}</div>
@@ -486,21 +272,25 @@
             }
         });
 
-        // Drag and drop functionality
-        uploadArea.addEventListener('dragover', function (e) {
+        // Drag and Drop functionality
+        uploadArea.addEventListener('dragover', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             uploadArea.classList.add('dragover');
         });
 
-        uploadArea.addEventListener('dragleave', function (e) {
+        uploadArea.addEventListener('dragleave', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             uploadArea.classList.remove('dragover');
         });
 
-        uploadArea.addEventListener('drop', function (e) {
+        uploadArea.addEventListener('drop', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             uploadArea.classList.remove('dragover');
-
+            
+            console.log("📂 Datei gedroppt");
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 fileInput.files = files;
@@ -514,7 +304,6 @@
                 <div class="upload-text">Klicken Sie hier oder ziehen Sie ein Bild hierher</div>
                 <div class="upload-hint">Unterstützte Formate: JPG, PNG, WEBP (max. 10MB)</div>
             `;
-            uploadArea.onclick = () => document.getElementById('imageInput').click();
         }
 
         function calcVerticalCrossSum() {
@@ -529,10 +318,13 @@
             document.getElementById("verticalCrossSum").value = crossSum;
         }
 
-        function analyzeNote() {
+        // HAUPTFUNKTION: Analyse starten
+        async function analyzeNote() {
+            console.log("🎯 ANALYSE GESTARTET!");
+            
             const start = performance.now();
             const file = document.getElementById("imageInput").files[0];
-
+            
             if (!file) {
                 alert("Bitte wählen Sie zuerst ein Bild aus!");
                 return;
@@ -540,137 +332,173 @@
 
             const results = document.getElementById("results");
             const btnText = document.getElementById("btnText");
-
+            
             // Update button state
             analyzeBtn.disabled = true;
-            btnText.textContent = "Analysiere...";
-
+            btnText.textContent = "Lade OCR-Engine...";
+            
             results.innerHTML = `
                 <div class="results-container">
-                    <div class="loading">Erkenne Text...</div>
+                    <div class="loading">Lade Tesseract.js...</div>
                     <div class="progress-container">
-                        <div class="progress-bar" id="progressBar"></div>
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
                     </div>
                 </div>
             `;
 
-            const imgUrl = URL.createObjectURL(file);
-
-            console.log("Starte OCR-Analyse...");
-
-            Tesseract.recognize(file, 'eng', {
-                logger: m => {
-                    if (m.status === 'recognizing text') {
-                        const progress = Math.round(m.progress * 100);
-                        const progressBar = document.getElementById('progressBar');
-                        const loadingText = document.querySelector('.loading');
-
-                        if (progressBar) progressBar.style.width = progress + '%';
-                        if (loadingText) loadingText.textContent = `Erkenne Text... ${progress}%`;
+            try {
+                // Tesseract.js erst jetzt laden
+                await loadTesseract();
+                
+                btnText.textContent = "Analysiere...";
+                results.innerHTML = `
+                    <div class="results-container">
+                        <div class="loading">Erkenne Text...</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                `;
+                
+                const imgUrl = URL.createObjectURL(file);
+                console.log("🔍 Starte OCR-Analyse...");
+                
+                // OCR-Analyse mit Tesseract.js
+                Tesseract.recognize(file, 'eng', {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            const progress = Math.round(m.progress * 100);
+                            const progressBar = document.getElementById('progressBar');
+                            const loadingText = document.querySelector('.loading');
+                            
+                            if (progressBar) progressBar.style.width = progress + '%';
+                            if (loadingText) loadingText.textContent = `Erkenne Text... ${progress}%`;
+                        }
                     }
-                }
-            }).then(({ data: { text } }) => {
-                console.log("OCR Ergebnis:", text);
+                }).then(({ data: { text } }) => {
+                    console.log("🎉 OCR Ergebnis:", text);
+                    
+                    // Euro-Seriennummern: 1-2 Buchstaben + 10-11 Ziffern
+                    const serialMatch = text.match(/[A-Z]{1,2}[0-9]{10,11}/);
+                    const serial = serialMatch ? serialMatch[0] : null;
+                    
+                    if (!serial) {
+                        console.warn("⚠️ Keine Seriennummer gefunden in:", text);
+                        results.innerHTML = `
+                            <div class="results-container">
+                                <div class="error">❌ Seriennummer konnte nicht erkannt werden. Bitte versuchen Sie es mit einem klareren Bild.</div>
+                                <details style="margin-top: 1rem;">
+                                    <summary>Debug: Erkannter Text anzeigen</summary>
+                                    <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 10px; margin-top: 0.5rem; white-space: pre-wrap;">${text}</pre>
+                                </details>
+                            </div>
+                        `;
+                        // Button wieder aktivieren
+                        analyzeBtn.disabled = false;
+                        btnText.textContent = "Bild analysieren";
+                        return;
+                    }
 
-                // Euro-Seriennummern: 1-2 Buchstaben + 10-11 Ziffern
-                const serialMatch = text.match(/[A-Z]{1,2}[0-9]{10,11}/);
-                const serial = serialMatch ? serialMatch[0] : null;
+                    console.log("✅ Seriennummer gefunden:", serial);
 
-                if (!serial) {
+                    // Berechnungen
+                    const digits = serial.replace(/\D/g, '').split('').map(d => parseInt(d));
+                    const sum = digits.reduce((a, b) => a + b, 0);
+                    const crossSum = sum.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+                    const code = serial.replace(/[0-9]/g, ''); // Nur Buchstaben
+                    const date = new Date().toLocaleString('de-DE');
+                    const duration = ((performance.now() - start) / 1000).toFixed(2);
+
+                    // Ergebnisse anzeigen
                     results.innerHTML = `
                         <div class="results-container">
-                            <div class="error">❌ Seriennummer konnte nicht erkannt werden. Bitte versuchen Sie es mit einem klareren Bild.</div>
+                            <h3>✅ Analyseergebnisse (bearbeitbar)</h3>
+                            <div class="results-grid">
+                                <div class="result-item">
+                                    <label>Seriennummer:</label>
+                                    <input id="serial" value="${serial}">
+                                </div>
+                                <div class="result-item">
+                                    <label>Ziffernfolge:</label>
+                                    <input id="digits" value="${digits.join(' ')}">
+                                </div>
+                                <div class="result-item">
+                                    <label>Ziffernsumme:</label>
+                                    <input id="sum" value="${sum}">
+                                </div>
+                                <div class="result-item">
+                                    <label>Quersumme:</label>
+                                    <input id="crossSum" value="${crossSum}">
+                                </div>
+                                <div class="result-item">
+                                    <label>Ländercode:</label>
+                                    <input id="code" value="${code}">
+                                </div>
+                                <div class="result-item">
+                                    <label>Vertikale Ziffernfolge:</label>
+                                    <input id="verticalDigits" oninput="calcVerticalCrossSum()" placeholder="Optional">
+                                </div>
+                                <div class="result-item">
+                                    <label>Quersumme (vertikal):</label>
+                                    <input id="verticalCrossSum" readonly>
+                                </div>
+                                <div class="result-item">
+                                    <label>Aufnahmedatum:</label>
+                                    <input id="date" value="${date}">
+                                </div>
+                                <div class="result-item">
+                                    <label>⏱ Analysezeit:</label>
+                                    <input readonly value="${duration} Sekunden">
+                                </div>
+                                <div class="result-item">
+                                    <label>Verfasser:</label>
+                                    <input id="authorName" placeholder="Ihr Name (optional)">
+                                </div>
+                            </div>
+                            
+                            <div class="image-preview">
+                                <img src="${imgUrl}" width="300" style="border-radius: 15px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+                            </div>
+                            
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button onclick="saveEntry()">📄 Speichern & Dokumentieren</button>
+                                <button onclick="resetForm()" class="secondary">🔄 Zurücksetzen</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Button wieder aktivieren
+                    analyzeBtn.disabled = false;
+                    btnText.textContent = "Bild analysieren";
+                    
+                    console.log("🎉 Analyse erfolgreich abgeschlossen");
+                    
+                }).catch(error => {
+                    console.error("❌ OCR Fehler:", error);
+                    results.innerHTML = `
+                        <div class="results-container">
+                            <div class="error">❌ Fehler bei der Texterkennung: ${error.message}</div>
+                            <details style="margin-top: 1rem;">
+                                <summary>Technische Details</summary>
+                                <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 10px; margin-top: 0.5rem;">${error.stack || error}</pre>
+                            </details>
                         </div>
                     `;
                     // Button wieder aktivieren
                     analyzeBtn.disabled = false;
                     btnText.textContent = "Bild analysieren";
-                    return;
-                }
-
-                // Berechnungen
-                const digits = serial.replace(/\D/g, '').split('').map(d => parseInt(d));
-                const sum = digits.reduce((a, b) => a + b, 0);
-                const crossSum = sum.toString().split('').reduce((a, b) => a + parseInt(b), 0);
-                const code = serial.replace(/[0-9]/g, ''); // Nur Buchstaben
-                const date = new Date().toLocaleString('de-DE');
-                const duration = ((performance.now() - start) / 1000).toFixed(2);
-
-                // Ergebnisse anzeigen
+                });
+                
+            } catch (error) {
+                console.error("❌ Fehler beim Laden von Tesseract.js:", error);
                 results.innerHTML = `
                     <div class="results-container">
-                        <h3>Analyseergebnisse (bearbeitbar)</h3>
-                        <div class="results-grid">
-                            <div class="result-item">
-                                <label>Seriennummer:</label>
-                                <input id="serial" value="${serial}">
-                            </div>
-                            <div class="result-item">
-                                <label>Ziffernfolge:</label>
-                                <input id="digits" value="${digits.join(' ')}">
-                            </div>
-                            <div class="result-item">
-                                <label>Ziffernsumme:</label>
-                                <input id="sum" value="${sum}">
-                            </div>
-                            <div class="result-item">
-                                <label>Quersumme:</label>
-                                <input id="crossSum" value="${crossSum}">
-                            </div>
-                            <div class="result-item">
-                                <label>Ländercode:</label>
-                                <input id="code" value="${code}">
-                            </div>
-                            <div class="result-item">
-                                <label>Vertikale Ziffernfolge:</label>
-                                <input id="verticalDigits" oninput="calcVerticalCrossSum()" placeholder="Optional">
-                            </div>
-                            <div class="result-item">
-                                <label>Quersumme (vertikal):</label>
-                                <input id="verticalCrossSum" readonly>
-                            </div>
-                            <div class="result-item">
-                                <label>Aufnahmedatum:</label>
-                                <input id="date" value="${date}">
-                            </div>
-                            <div class="result-item">
-                                <label>⏱ Analysezeit:</label>
-                                <input readonly value="${duration} Sekunden">
-                            </div>
-                            <div class="result-item">
-                                <label>Verfasser:</label>
-                                <input id="authorName" placeholder="Ihr Name (optional)">
-                            </div>
-                        </div>
-                        
-                        <div class="image-preview">
-                            <img src="${imgUrl}" width="300" style="border-radius: 15px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
-                        </div>
-                        
-                        <div style="text-align: center; margin-top: 2rem;">
-                            <button onclick="saveEntry()">📄 Speichern & Dokumentieren</button>
-                            <button onclick="resetForm()" class="secondary">🔄 Zurücksetzen</button>
-                        </div>
+                        <div class="error">❌ OCR-Engine konnte nicht geladen werden. Bitte versuchen Sie es erneut.</div>
                     </div>
                 `;
-
-                // Button wieder aktivieren
                 analyzeBtn.disabled = false;
                 btnText.textContent = "Bild analysieren";
-
-                console.log("Analyse erfolgreich abgeschlossen");
-
-            }).catch(error => {
-                console.error("OCR Fehler:", error);
-                results.innerHTML = `
-                    <div class="results-container">
-                        <div class="error">❌ Fehler bei der Texterkennung: ${error.message}</div>
-                    </div>
-                `;
-                // Button wieder aktivieren
-                analyzeBtn.disabled = false;
-                btnText.textContent = "Bild analysieren";
-            });
+            }
         }
 
         function saveEntry() {
@@ -683,7 +511,7 @@
 
                 const canvas = document.createElement("canvas");
                 const ctx = canvas.getContext("2d");
-
+                
                 // Funktion zur Bildverarbeitung
                 const processImage = () => {
                     canvas.width = imgElement.naturalWidth || imgElement.width;
@@ -710,20 +538,20 @@
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(entry)
                     })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                            }
-                            return response.json();
-                        })
-                        .then(() => {
-                            alert("Analyse wurde erfolgreich gespeichert!");
-                            window.location.href = "dokumentation.html";
-                        })
-                        .catch(err => {
-                            console.error("Speicher-Fehler:", err);
-                            alert("❌ Fehler beim Speichern: " + err.message);
-                        });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(() => {
+                        alert("✅ Analyse wurde erfolgreich gespeichert!");
+                        window.location.href = "dokumentation.html";
+                    })
+                    .catch(err => {
+                        console.error("Speicher-Fehler:", err);
+                        alert("❌ Fehler beim Speichern: " + err.message);
+                    });
                 };
 
                 // Prüfen ob Bild bereits geladen ist
@@ -748,9 +576,8 @@
         }
 
         // Debug-Informationen
-        console.log("EuroNoteScanner geladen - Version 2.0");
-        console.log("Tesseract verfügbar:", typeof Tesseract !== 'undefined');
+        console.log("✅ Upload-Handler konfiguriert");
+        console.log("📋 Tesseract wird bei Bedarf geladen");
     </script>
 </body>
-
 </html>
