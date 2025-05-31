@@ -430,3 +430,40 @@ label {
   background: rgba(79, 70, 229, 0.3);
   color: white;
 }
+
+/* === Entfernt automatische Nummerierung bei Headers === */
+
+/* Entfernt Counter für Steps Container */
+.steps-container {
+  counter-reset: none;
+}
+
+/* Entfernt automatische Nummerierung vor allen Headers */
+h1::before, 
+h2::before, 
+h3::before, 
+h4::before, 
+h5::before, 
+h6::before {
+  content: none !important;
+  counter-increment: none !important;
+}
+
+/* Spezifisch für Step-Content Headers */
+.step-content h4::before {
+  content: none !important;
+}
+
+/* Falls es CSS-Counter gibt, diese deaktivieren */
+body {
+  counter-reset: none;
+}
+
+/* Entfernt alle möglichen CSS-Counter */
+* {
+  counter-increment: none;
+}
+
+*::before {
+  counter-increment: none;
+}
