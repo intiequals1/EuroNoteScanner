@@ -10,9 +10,9 @@
 </head>
 <body>
     <nav>
-        <a href="start.html">🏠 Start</a>
-        <a href="index.html" class="active">🔍 Analyse</a>
-        <a href="dokumentation.html">📄 Dokumentation</a>
+        <a href="start.html">Start</a>
+        <a href="index.html" class="active">Analyse</a>
+        <a href="dokumentation.html">Dokumentation</a>
     </nav>
 
     <main>
@@ -20,7 +20,7 @@
         
         <!-- Anleitung -->
         <div class="steps-container">
-            <h2>🚀 So funktioniert die Analyse</h2>
+            <h2>So funktioniert die Analyse</h2>
             <div class="step">
                 <div class="step-number">1</div>
                 <div class="step-content">
@@ -54,13 +54,12 @@
         <!-- Wichtige Hinweise -->
         <div class="collapsible">
             <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                <span>⚠️ Wichtige rechtliche und ethische Hinweise</span>
+                <span>Wichtige rechtliche und ethische Hinweise</span>
                 <span class="collapsible-icon">▼</span>
             </div>
             <div class="collapsible-content">
                 <div class="warning-card">
                     <div class="info-card-header">
-                        <span>⚖️</span>
                         <span>Rechtliche Aspekte</span>
                     </div>
                     <ul>
@@ -73,7 +72,6 @@
 
                 <div class="info-card">
                     <div class="info-card-header">
-                        <span>🛡️</span>
                         <span>Ethische Verantwortung</span>
                     </div>
                     <ul>
@@ -86,7 +84,6 @@
 
                 <div class="info-card">
                     <div class="info-card-header">
-                        <span>🔒</span>
                         <span>Datenschutz & Sicherheit</span>
                     </div>
                     <p>Ihre Daten werden wie folgt behandelt:</p>
@@ -102,13 +99,12 @@
 
         <div class="collapsible">
             <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                <span>⚠️ Mögliche Risiken und Probleme</span>
+                <span>Mögliche Risiken und Probleme</span>
                 <span class="collapsible-icon">▼</span>
             </div>
             <div class="collapsible-content">
                 <div class="warning-card">
                     <div class="info-card-header">
-                        <span>🚨</span>
                         <span>Technische Risiken</span>
                     </div>
                     <ul>
@@ -121,7 +117,6 @@
 
                 <div class="warning-card">
                     <div class="info-card-header">
-                        <span>⚖️</span>
                         <span>Rechtliche Risiken</span>
                     </div>
                     <ul>
@@ -134,7 +129,6 @@
 
                 <div class="warning-card">
                     <div class="info-card-header">
-                        <span>🔐</span>
                         <span>Sicherheitsrisiken</span>
                     </div>
                     <ul>
@@ -149,7 +143,7 @@
 
         <div class="collapsible">
             <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                <span>📋 Nutzungsvereinbarung</span>
+                <span>Nutzungsvereinbarung</span>
                 <span class="collapsible-icon">▼</span>
             </div>
             <div class="collapsible-content">
@@ -170,7 +164,7 @@
 
         <!-- Upload Area -->
         <div class="upload-area" onclick="document.getElementById('imageInput').click()">
-            <span class="upload-icon">📸</span>
+            <span class="upload-icon"></span>
             <div class="upload-text">Klicken Sie hier oder ziehen Sie ein Bild hierher</div>
             <div class="upload-hint">Unterstützte Formate: JPG, PNG, WEBP (max. 10MB)</div>
             <input type="file" id="imageInput" accept="image/*">
@@ -342,7 +336,7 @@
                 // Ergebnisse anzeigen
                 results.innerHTML = `
                     <div class="results-container">
-                        <h3>✅ Analyseergebnisse (bearbeitbar)</h3>
+                        <h3>Analyseergebnisse (bearbeitbar)</h3>
                         <div class="results-grid">
                             <div class="result-item">
                                 <label>Seriennummer:</label>
@@ -460,7 +454,7 @@
                         return response.json();
                     })
                     .then(() => {
-                        alert("✅ Analyse wurde erfolgreich gespeichert!");
+                        alert("Analyse wurde erfolgreich gespeichert!");
                         window.location.href = "dokumentation.html";
                     })
                     .catch(err => {

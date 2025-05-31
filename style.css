@@ -1,4 +1,4 @@
-/* Opera Neon-inspiriertes Design für EuroNoteScanner */
+/* Opera Neon-inspiriertes Design fÃžr EuroNoteScanner */
 
 :root {
   --primary-bg: #0a0b0f;
@@ -31,9 +31,41 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  counter-reset: none;
 }
 
-/* Glassmorphismus Container */
+/* === ENTFERNT AUTOMATISCHE NUMMERIERUNG === */
+/* Entfernt Counter fÃžr Steps Container */
+.steps-container {
+  counter-reset: none;
+}
+
+/* Entfernt automatische Nummerierung vor allen Headers */
+h1::before, 
+h2::before, 
+h3::before, 
+h4::before, 
+h5::before, 
+h6::before {
+  content: none !important;
+  counter-increment: none !important;
+}
+
+/* Spezifisch fÃžr Step-Content Headers */
+.step-content h4::before {
+  content: none !important;
+}
+
+/* Entfernt alle mÃķglichen CSS-Counter */
+* {
+  counter-increment: none;
+}
+
+*::before {
+  counter-increment: none;
+}
+
+/* === GLASSMORPHISMUS CONTAINER === */
 .glass-container {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -45,7 +77,7 @@ body {
   box-shadow: 0 8px 32px var(--shadow-color);
 }
 
-/* Navigation */
+/* === NAVIGATION === */
 nav {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -87,14 +119,14 @@ nav a.active {
   box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
 }
 
-/* Main Content */
+/* === MAIN CONTENT === */
 main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-/* Headings */
+/* === HEADINGS === */
 h1 {
   font-size: 3.5rem;
   font-weight: 700;
@@ -129,7 +161,7 @@ h4 {
   margin-bottom: 0.75rem;
 }
 
-/* Buttons */
+/* === BUTTONS === */
 button {
   background: var(--accent-gradient);
   color: white;
@@ -174,7 +206,7 @@ button.secondary:hover {
   box-shadow: 0 8px 24px var(--shadow-color);
 }
 
-/* Form Elements */
+/* === FORM ELEMENTS === */
 input[type="file"] {
   background: var(--glass-bg);
   border: 2px dashed var(--glass-border);
@@ -217,7 +249,30 @@ input::placeholder, textarea::placeholder {
   color: var(--text-secondary);
 }
 
-/* Labels */
+select {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+select option {
+  background: var(--secondary-bg);
+  color: var(--text-primary);
+}
+
+/* === LABELS === */
 label {
   display: block;
   color: var(--text-secondary);
@@ -226,7 +281,190 @@ label {
   font-size: 0.95rem;
 }
 
-/* Results Container */
+/* === INFORMATION CARDS === */
+.info-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.info-card p {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.info-card ul {
+  margin-left: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.info-card li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.warning-card {
+  background: rgba(245, 158, 11, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.warning-card .info-card-header {
+  color: var(--warning-color);
+}
+
+/* === STEPS CONTAINER === */
+.steps-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px var(--shadow-color);
+  counter-reset: none;
+}
+
+.step {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.step-number {
+  background: var(--accent-gradient);
+  color: white;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step-content h4 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.step-content p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* === COLLAPSIBLE SECTIONS === */
+.collapsible {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.collapsible-header {
+  padding: 1.5rem 2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  color: var(--text-primary);
+}
+
+.collapsible-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.collapsible-content {
+  display: none;
+  padding: 0 2rem 2rem;
+}
+
+.collapsible.active .collapsible-content {
+  display: block;
+}
+
+.collapsible-icon {
+  transition: transform 0.3s ease;
+}
+
+.collapsible.active .collapsible-icon {
+  transform: rotate(180deg);
+}
+
+/* === UPLOAD AREA === */
+.upload-area {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 2px dashed var(--glass-border);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 8px 32px var(--shadow-color);
+}
+
+.upload-area:hover {
+  border-color: var(--accent-color);
+  background: rgba(79, 70, 229, 0.1);
+  transform: translateY(-2px);
+}
+
+.upload-area.dragover {
+  border-color: var(--accent-color);
+  background: rgba(79, 70, 229, 0.2);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.upload-text {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* === RESULTS CONTAINER === */
 #results {
   margin-top: 2rem;
 }
@@ -254,7 +492,24 @@ label {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Entry Cards */
+/* === IMAGE PREVIEW === */
+.image-preview {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.image-preview img {
+  max-width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.image-preview img:hover {
+  transform: scale(1.02);
+}
+
+/* === ENTRY CARDS === */
 .entry {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -282,7 +537,7 @@ label {
   transform: scale(1.02);
 }
 
-/* Status Messages */
+/* === STATUS MESSAGES === */
 .loading {
   color: var(--warning-color);
   font-weight: 600;
@@ -311,7 +566,7 @@ label {
   font-weight: 600;
 }
 
-/* Animations */
+/* === ANIMATIONS === */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -332,7 +587,7 @@ label {
   animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Progress Bar */
+/* === PROGRESS BAR === */
 .progress-container {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -348,7 +603,7 @@ label {
   transition: width 0.3s ease;
 }
 
-/* Responsive Design */
+/* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
   nav {
     flex-wrap: wrap;
@@ -381,16 +636,32 @@ label {
   .results-grid {
     grid-template-columns: 1fr;
   }
+  
+  .upload-area {
+    padding: 2rem;
+  }
+  
+  .upload-icon {
+    font-size: 2rem;
+  }
+  
+  .step {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .step-number {
+    align-self: center;
+  }
 }
 
-/* Dark mode improvements */
+/* === ACCESSIBILITY === */
 @media (prefers-color-scheme: dark) {
   body {
     background: var(--primary-bg);
   }
 }
 
-/* High contrast mode */
 @media (prefers-contrast: high) {
   :root {
     --glass-border: rgba(255, 255, 255, 0.5);
@@ -398,7 +669,6 @@ label {
   }
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -407,7 +677,7 @@ label {
   }
 }
 
-/* Scrollbar Styling */
+/* === SCROLLBAR STYLING === */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -425,45 +695,8 @@ label {
   background: #6366f1;
 }
 
-/* Custom Selection */
+/* === CUSTOM SELECTION === */
 ::selection {
   background: rgba(79, 70, 229, 0.3);
   color: white;
-}
-
-/* === Entfernt automatische Nummerierung bei Headers === */
-
-/* Entfernt Counter für Steps Container */
-.steps-container {
-  counter-reset: none;
-}
-
-/* Entfernt automatische Nummerierung vor allen Headers */
-h1::before, 
-h2::before, 
-h3::before, 
-h4::before, 
-h5::before, 
-h6::before {
-  content: none !important;
-  counter-increment: none !important;
-}
-
-/* Spezifisch für Step-Content Headers */
-.step-content h4::before {
-  content: none !important;
-}
-
-/* Falls es CSS-Counter gibt, diese deaktivieren */
-body {
-  counter-reset: none;
-}
-
-/* Entfernt alle möglichen CSS-Counter */
-* {
-  counter-increment: none;
-}
-
-*::before {
-  counter-increment: none;
 }
