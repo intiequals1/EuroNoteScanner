@@ -130,63 +130,58 @@
             try {
                 // METHODE 1: Versuche zuerst die direkte JSON-Datei
                 console.log("📂 Versuche docs/entries.json zu laden...");
-                let response = await fetch("docs/entries.json?t=" + Date.now());
-                
+                const response = await fetch("docs/entries.json?t=" + Date.now());
+
                 if (!response.ok) {
                     console.warn("⚠️ docs/entries.json nicht gefunden, versuche GitHub API...");
                     throw new Error(`JSON-Datei nicht gefunden (${response.status})`);
                 }
-            } catch (error) {
-                console.error("Fehler beim Laden der Daten:", error);
-                
-                // Zeige Fehlermeldung
-                errorDetails.innerHTML = `
-                    <strong>Fehler beim Laden der Daten:</strong><br>
-                    ${error.message}<br><br>
-                    <details>
-                        <summary>Technische Details</summary>
-                        <pre style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 5px; margin-top: 0.5rem;">${error.stack || error}</pre>
-                    </details>
-                `;
-                errorIndicator.style.display = 'block';
-                allEntries = [];
-                
+
                 const data = await response.text();
                 console.log("📄 JSON-Datei Inhalt:", data.substring(0, 200) + "...");
-                
+
                 allEntries = JSON.parse(data);
                 console.log("✅ Einträge aus JSON-Datei geladen:", allEntries.length);
-                
+
             } catch (jsonError) {
                 console.log("🔄 JSON-Datei Fehler, versuche GitHub API:", jsonError.message);
-                
+
                 try {
                     // METHODE 2: GitHub API über Netlify Function
                     console.log("📡 Versuche GitHub API über Netlify Function...");
-                    response = await fetch("/.netlify/functions/getEntries", {
+                    const response = await fetch("/.netlify/functions/getEntries", {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json"
                         }
                     });
-                    
+
                     if (!response.ok) {
                         const errorText = await response.text();
                         console.error("❌ Netlify Function Fehler:", errorText);
                         throw new Error(`GitHub API Fehler (${response.status}): ${errorText}`);
                     }
-                    
+
                     const apiData = await response.json();
                     console.log("📊 GitHub API Response:", apiData);
-                    
+
                     allEntries = apiData.entries || [];
                     console.log("✅ Einträge aus GitHub API geladen:", allEntries.length);
-                    
+
                 } catch (apiError) {
                     console.error("GitHub API Fehler:", apiError);
-                    
-                    // Kein Fallback - zeige nur echte Daten
-                    throw apiError;
+
+                    // Zeige Fehlermeldung
+                    errorDetails.innerHTML = `
+                        <strong>Fehler beim Laden der Daten:</strong><br>
+                        ${apiError.message}<br><br>
+                        <details>
+                            <summary>Technische Details</summary>
+                            <pre style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 5px; margin-top: 0.5rem;">${apiError.stack || apiError}</pre>
+                        </details>
+                    `;
+                    errorIndicator.style.display = 'block';
+                    allEntries = [];
                 }
             }
             
