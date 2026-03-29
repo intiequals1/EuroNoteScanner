@@ -16,6 +16,10 @@ Eine einfache Webapp zur Dokumentation und Analyse von Euro-Geldscheinen.
 2. Lade ein Foto eines Euro-Scheins hoch
 3. Die App analysiert den Text und zeigt relevante Merkmale an
 
+## Hinweise
+
+- Setze den "Bild analysieren"-Button außerhalb von Formularen bewusst auf `type="button"`, um unerwünschte Seitenreloads auf Mobilgeräten wie Microsoft Edge zu vermeiden.
+
 ## Lizenz
 
 MIT License – frei verwendbar, gerne weiterentwickeln!
